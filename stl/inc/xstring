@@ -4216,10 +4216,6 @@ private:
         _Traits::assign(_Mypair._Myval2._Bx._Buf[0], _Elem());
     }
 
-    [[noreturn]] static void _Xlen() {
-        _Xlength_error("string too long");
-    }
-
 public:
     void _Orphan_all() noexcept { // used by filesystem::path
         _Mypair._Myval2._Orphan_all();
