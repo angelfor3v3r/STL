@@ -40,4 +40,12 @@ _STD_BEGIN
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xregex_error(const regex_constants::error_type _Code) {
     _THROW(regex_error(_Code));
 }
+
+[[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xlen() {
+
+}
+
+[[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Throw_bad_array_new_length() {
+
+}
 _STD_END
