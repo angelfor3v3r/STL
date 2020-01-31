@@ -1,3 +1,11 @@
+# !!! Important info before you continue reading !!!
+
+This repo is a fork of MSVC's C++ Standard Library and it contains a few quality of life changes that I personally desired.
+
+With my changes you're able to override certain functions that MSVC STL uses to throw an exception when an error happens. This leads to a smaller code footprint, less exceptions and less imports (on Windows). You should override these functions with an `ExitProcess` / `exit` function call... or go your own route and clean up objects manually and then exit, whatever you want.
+
+If you don't provide function overrides default behaviour of throwing will happen but with less verbose exceptions.
+
 # Microsoft's C++ Standard Library
 
 This is the official repository for Microsoft's implementation of the C++ Standard Library (also known as the STL),
