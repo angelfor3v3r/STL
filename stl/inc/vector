@@ -1700,14 +1700,6 @@ private:
         }
     }
 
-    [[noreturn]] static void _Xlength() {
-        _Xlength_error("vector too long");
-    }
-
-    [[noreturn]] static void _Xrange() {
-        _Xout_of_range("invalid vector subscript");
-    }
-
     void _Orphan_range(pointer _First, pointer _Last) const { // orphan iterators within specified (inclusive) range
 #if _ITERATOR_DEBUG_LEVEL == 2
         _Lockit _Lock(_LOCK_DEBUG);

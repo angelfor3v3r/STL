@@ -42,10 +42,18 @@ _STD_BEGIN
 }
 
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xlen() {
+    _THROW(length_error("Bad length or too long"));
+}
 
+[[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xlength() {
+    _THROW(length_error("Bad length or too long"));
+}
+
+[[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xrange() {
+    _THROW(length_error("Bad range or out of range"));
 }
 
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Throw_bad_array_new_length() {
-
+    _THROW(length_error("Bad array new length"));
 }
 _STD_END
