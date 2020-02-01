@@ -2200,10 +2200,6 @@ struct _String_constructor_concat_tag {
     explicit _String_constructor_concat_tag() = default;
 };
 
-[[noreturn]] inline void _Xlen_string() {
-    _Xlength_error("string too long");
-}
-
 template <class _Elem, class _Traits = char_traits<_Elem>, class _Alloc = allocator<_Elem>>
 class basic_string { // null-terminated transparent array of elements
 private:

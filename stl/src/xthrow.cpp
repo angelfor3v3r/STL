@@ -41,16 +41,16 @@ _STD_BEGIN
     _THROW(regex_error(_Code));
 }
 
-[[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xlen() {
-    _THROW(length_error("Bad length or too long"));
+[[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xlen_string() {
+    _THROW(length_error("Bad string length"));
 }
 
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xlength() {
-    _THROW(length_error("Bad length or too long"));
+    _THROW(length_error("Bad length"));
 }
 
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xrange() {
-    _THROW(length_error("Bad range or out of range"));
+    _THROW(length_error("Bad range"));
 }
 
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Throw_bad_array_new_length() {
