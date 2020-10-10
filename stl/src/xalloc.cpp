@@ -3,17 +3,18 @@
 
 // TRANSITION, ABI: The functions in this file are preserved for binary compatibility
 
-#include "awint.h"
 #include <stdexcept>
 
 #include <Windows.h>
+
+#include "awint.hpp"
 
 namespace stdext {
     namespace threads {
 
         _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Mtx_new(void*& _Ptr) {
             _Ptr = new CRITICAL_SECTION;
-            __crtInitializeCriticalSectionEx(static_cast<CRITICAL_SECTION*>(_Ptr), 4000, 0);
+            InitializeCriticalSectionEx(static_cast<CRITICAL_SECTION*>(_Ptr), 4000, 0);
         }
 
         _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Mtx_delete(void* _Ptr) {

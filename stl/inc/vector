@@ -43,7 +43,7 @@ public:
         this->_Adopt(_Pvector);
     }
 
-    _NODISCARD reference operator*() const {
+    _NODISCARD reference operator*() const noexcept {
 #if _ITERATOR_DEBUG_LEVEL != 0
         const auto _Mycont = static_cast<const _Myvec*>(this->_Getcont());
         _STL_VERIFY(_Ptr, "can't dereference value-initialized vector iterator");
@@ -54,7 +54,7 @@ public:
         return *_Ptr;
     }
 
-    _NODISCARD pointer operator->() const {
+    _NODISCARD pointer operator->() const noexcept {
 #if _ITERATOR_DEBUG_LEVEL != 0
         const auto _Mycont = static_cast<const _Myvec*>(this->_Getcont());
         _STL_VERIFY(_Ptr, "can't dereference value-initialized vector iterator");
@@ -65,7 +65,7 @@ public:
         return _Ptr;
     }
 
-    _Vector_const_iterator& operator++() {
+    _Vector_const_iterator& operator++() noexcept {
 #if _ITERATOR_DEBUG_LEVEL != 0
         const auto _Mycont = static_cast<const _Myvec*>(this->_Getcont());
         _STL_VERIFY(_Ptr, "can't increment value-initialized vector iterator");
@@ -76,13 +76,13 @@ public:
         return *this;
     }
 
-    _Vector_const_iterator operator++(int) {
+    _Vector_const_iterator operator++(int) noexcept {
         _Vector_const_iterator _Tmp = *this;
         ++*this;
         return _Tmp;
     }
 
-    _Vector_const_iterator& operator--() {
+    _Vector_const_iterator& operator--() noexcept {
 #if _ITERATOR_DEBUG_LEVEL != 0
         const auto _Mycont = static_cast<const _Myvec*>(this->_Getcont());
         _STL_VERIFY(_Ptr, "can't decrement value-initialized vector iterator");
@@ -93,13 +93,13 @@ public:
         return *this;
     }
 
-    _Vector_const_iterator operator--(int) {
+    _Vector_const_iterator operator--(int) noexcept {
         _Vector_const_iterator _Tmp = *this;
         --*this;
         return _Tmp;
     }
 
-    void _Verify_offset(const difference_type _Off) const {
+    void _Verify_offset(const difference_type _Off) const noexcept {
 #if _ITERATOR_DEBUG_LEVEL == 0
         (void) _Off;
 #else // ^^^ _ITERATOR_DEBUG_LEVEL == 0 ^^^ // vvv _ITERATOR_DEBUG_LEVEL != 0 vvv
@@ -115,62 +115,62 @@ public:
 #endif // _ITERATOR_DEBUG_LEVEL == 0
     }
 
-    _Vector_const_iterator& operator+=(const difference_type _Off) {
+    _Vector_const_iterator& operator+=(const difference_type _Off) noexcept {
         _Verify_offset(_Off);
         _Ptr += _Off;
         return *this;
     }
 
-    _NODISCARD _Vector_const_iterator operator+(const difference_type _Off) const {
+    _NODISCARD _Vector_const_iterator operator+(const difference_type _Off) const noexcept {
         _Vector_const_iterator _Tmp = *this;
         return _Tmp += _Off;
     }
 
-    _Vector_const_iterator& operator-=(const difference_type _Off) {
+    _Vector_const_iterator& operator-=(const difference_type _Off) noexcept {
         return *this += -_Off;
     }
 
-    _NODISCARD _Vector_const_iterator operator-(const difference_type _Off) const {
+    _NODISCARD _Vector_const_iterator operator-(const difference_type _Off) const noexcept {
         _Vector_const_iterator _Tmp = *this;
         return _Tmp -= _Off;
     }
 
-    _NODISCARD difference_type operator-(const _Vector_const_iterator& _Right) const {
+    _NODISCARD difference_type operator-(const _Vector_const_iterator& _Right) const noexcept {
         _Compat(_Right);
         return _Ptr - _Right._Ptr;
     }
 
-    _NODISCARD reference operator[](const difference_type _Off) const {
+    _NODISCARD reference operator[](const difference_type _Off) const noexcept {
         return *(*this + _Off);
     }
 
-    _NODISCARD bool operator==(const _Vector_const_iterator& _Right) const {
+    _NODISCARD bool operator==(const _Vector_const_iterator& _Right) const noexcept {
         _Compat(_Right);
         return _Ptr == _Right._Ptr;
     }
 
-    _NODISCARD bool operator!=(const _Vector_const_iterator& _Right) const {
+    _NODISCARD bool operator!=(const _Vector_const_iterator& _Right) const noexcept {
         return !(*this == _Right);
     }
 
-    _NODISCARD bool operator<(const _Vector_const_iterator& _Right) const {
+    _NODISCARD bool operator<(const _Vector_const_iterator& _Right) const noexcept {
         _Compat(_Right);
         return _Ptr < _Right._Ptr;
     }
 
-    _NODISCARD bool operator>(const _Vector_const_iterator& _Right) const {
+    _NODISCARD bool operator>(const _Vector_const_iterator& _Right) const noexcept {
         return _Right < *this;
     }
 
-    _NODISCARD bool operator<=(const _Vector_const_iterator& _Right) const {
+    _NODISCARD bool operator<=(const _Vector_const_iterator& _Right) const noexcept {
         return !(_Right < *this);
     }
 
-    _NODISCARD bool operator>=(const _Vector_const_iterator& _Right) const {
+    _NODISCARD bool operator>=(const _Vector_const_iterator& _Right) const noexcept {
         return !(*this < _Right);
     }
 
-    void _Compat(const _Vector_const_iterator& _Right) const { // test for compatible iterator pair
+    void _Compat(const _Vector_const_iterator& _Right) const noexcept { // test for compatible iterator pair
 #if _ITERATOR_DEBUG_LEVEL == 0
         (void) _Right;
 #else // ^^^ _ITERATOR_DEBUG_LEVEL == 0 ^^^ // vvv _ITERATOR_DEBUG_LEVEL != 0 vvv
@@ -179,7 +179,7 @@ public:
     }
 
 #if _ITERATOR_DEBUG_LEVEL != 0
-    friend void _Verify_range(const _Vector_const_iterator& _First, const _Vector_const_iterator& _Last) {
+    friend void _Verify_range(const _Vector_const_iterator& _First, const _Vector_const_iterator& _Last) noexcept {
         _STL_VERIFY(_First._Getcont() == _Last._Getcont(), "vector iterators in range are from different containers");
         _STL_VERIFY(_First._Ptr <= _Last._Ptr, "vector iterator range transposed");
     }
@@ -187,11 +187,11 @@ public:
 
     using _Prevent_inheriting_unwrap = _Vector_const_iterator;
 
-    _NODISCARD const value_type* _Unwrapped() const {
+    _NODISCARD const value_type* _Unwrapped() const noexcept {
         return _Unfancy(_Ptr);
     }
 
-    void _Seek_to(const value_type* _It) {
+    void _Seek_to(const value_type* _It) noexcept {
         _Ptr = _Refancy<_Tptr>(const_cast<value_type*>(_It));
     }
 
@@ -200,7 +200,7 @@ public:
 
 template <class _Myvec>
 _NODISCARD _Vector_const_iterator<_Myvec> operator+(
-    typename _Vector_const_iterator<_Myvec>::difference_type _Off, _Vector_const_iterator<_Myvec> _Next) {
+    typename _Vector_const_iterator<_Myvec>::difference_type _Off, _Vector_const_iterator<_Myvec> _Next) noexcept {
     return _Next += _Off;
 }
 
@@ -248,72 +248,72 @@ public:
 
     using _Mybase::_Mybase;
 
-    _NODISCARD reference operator*() const {
+    _NODISCARD reference operator*() const noexcept {
         return const_cast<reference>(_Mybase::operator*());
     }
 
-    _NODISCARD pointer operator->() const {
+    _NODISCARD pointer operator->() const noexcept {
         return _Const_cast(_Mybase::operator->());
     }
 
-    _Vector_iterator& operator++() {
+    _Vector_iterator& operator++() noexcept {
         _Mybase::operator++();
         return *this;
     }
 
-    _Vector_iterator operator++(int) {
+    _Vector_iterator operator++(int) noexcept {
         _Vector_iterator _Tmp = *this;
         _Mybase::operator++();
         return _Tmp;
     }
 
-    _Vector_iterator& operator--() {
+    _Vector_iterator& operator--() noexcept {
         _Mybase::operator--();
         return *this;
     }
 
-    _Vector_iterator operator--(int) {
+    _Vector_iterator operator--(int) noexcept {
         _Vector_iterator _Tmp = *this;
         _Mybase::operator--();
         return _Tmp;
     }
 
-    _Vector_iterator& operator+=(const difference_type _Off) {
+    _Vector_iterator& operator+=(const difference_type _Off) noexcept {
         _Mybase::operator+=(_Off);
         return *this;
     }
 
-    _NODISCARD _Vector_iterator operator+(const difference_type _Off) const {
+    _NODISCARD _Vector_iterator operator+(const difference_type _Off) const noexcept {
         _Vector_iterator _Tmp = *this;
         return _Tmp += _Off;
     }
 
-    _Vector_iterator& operator-=(const difference_type _Off) {
+    _Vector_iterator& operator-=(const difference_type _Off) noexcept {
         _Mybase::operator-=(_Off);
         return *this;
     }
 
     using _Mybase::operator-;
 
-    _NODISCARD _Vector_iterator operator-(const difference_type _Off) const {
+    _NODISCARD _Vector_iterator operator-(const difference_type _Off) const noexcept {
         _Vector_iterator _Tmp = *this;
         return _Tmp -= _Off;
     }
 
-    _NODISCARD reference operator[](const difference_type _Off) const {
+    _NODISCARD reference operator[](const difference_type _Off) const noexcept {
         return const_cast<reference>(_Mybase::operator[](_Off));
     }
 
     using _Prevent_inheriting_unwrap = _Vector_iterator;
 
-    _NODISCARD value_type* _Unwrapped() const {
+    _NODISCARD value_type* _Unwrapped() const noexcept {
         return _Unfancy(this->_Ptr);
     }
 };
 
 template <class _Myvec>
 _NODISCARD _Vector_iterator<_Myvec> operator+(
-    typename _Vector_iterator<_Myvec>::difference_type _Off, _Vector_iterator<_Myvec> _Next) {
+    typename _Vector_iterator<_Myvec>::difference_type _Off, _Vector_iterator<_Myvec> _Next) noexcept {
     return _Next += _Off;
 }
 
@@ -357,6 +357,7 @@ struct _Vec_iter_types {
 
 // STRUCT _Value_init_tag
 struct _Value_init_tag { // tag to request value-initialization
+    explicit _Value_init_tag() = default;
 };
 
 // CLASS TEMPLATE _Vector_val
@@ -373,6 +374,9 @@ public:
 
     _Vector_val() noexcept : _Myfirst(), _Mylast(), _Myend() {}
 
+    _Vector_val(pointer _First, pointer _Last, pointer _End) noexcept
+        : _Myfirst(_First), _Mylast(_Last), _Myend(_End) {}
+
     void _Swap_val(_Vector_val& _Right) noexcept {
         this->_Swap_proxy_and_iterators(_Right);
         _Swap_adl(_Myfirst, _Right._Myfirst);
@@ -386,9 +390,9 @@ public:
         _Mylast  = _Right._Mylast;
         _Myend   = _Right._Myend;
 
-        _Right._Myfirst = pointer();
-        _Right._Mylast  = pointer();
-        _Right._Myend   = pointer();
+        _Right._Myfirst = nullptr;
+        _Right._Mylast  = nullptr;
+        _Right._Myend   = nullptr;
     }
 
     pointer _Myfirst; // pointer to beginning of array
@@ -398,12 +402,12 @@ public:
 
 // FUNCTION TEMPLATE _Unfancy_maybe_null
 template <class _Ptrty>
-auto _Unfancy_maybe_null(_Ptrty _Ptr) { // converts from a (potentially null) fancy pointer to a plain pointer
+auto _Unfancy_maybe_null(_Ptrty _Ptr) noexcept { // converts from a (potentially null) fancy pointer to a plain pointer
     return _Ptr ? _STD addressof(*_Ptr) : nullptr;
 }
 
 template <class _Ty>
-_Ty* _Unfancy_maybe_null(_Ty* _Ptr) { // do nothing for plain pointers
+_Ty* _Unfancy_maybe_null(_Ty* _Ptr) noexcept { // do nothing for plain pointers
     return _Ptr;
 }
 
@@ -441,11 +445,11 @@ public:
     using reverse_iterator       = _STD reverse_iterator<iterator>;
     using const_reverse_iterator = _STD reverse_iterator<const_iterator>;
 
-    vector() noexcept(is_nothrow_default_constructible_v<_Alty>) : _Mypair(_Zero_then_variadic_args_t()) {
+    vector() noexcept(is_nothrow_default_constructible_v<_Alty>) : _Mypair(_Zero_then_variadic_args_t{}) {
         _Mypair._Myval2._Alloc_proxy(_GET_PROXY_ALLOCATOR(_Alty, _Getal()));
     }
 
-    explicit vector(const _Alloc& _Al) noexcept : _Mypair(_One_then_variadic_args_t(), _Al) {
+    explicit vector(const _Alloc& _Al) noexcept : _Mypair(_One_then_variadic_args_t{}, _Al) {
         _Mypair._Myval2._Alloc_proxy(_GET_PROXY_ALLOCATOR(_Alty, _Getal()));
     }
 
@@ -467,12 +471,12 @@ private:
 
 public:
     explicit vector(_CRT_GUARDOVERFLOW const size_type _Count, const _Alloc& _Al = _Alloc())
-        : _Mypair(_One_then_variadic_args_t(), _Al) {
+        : _Mypair(_One_then_variadic_args_t{}, _Al) {
         _Construct_n_copies_of_ty(_Count, _Value_init_tag{});
     }
 
     vector(_CRT_GUARDOVERFLOW const size_type _Count, const _Ty& _Val, const _Alloc& _Al = _Alloc())
-        : _Mypair(_One_then_variadic_args_t(), _Al) {
+        : _Mypair(_One_then_variadic_args_t{}, _Al) {
         _Construct_n_copies_of_ty(_Count, _Val);
     }
 
@@ -501,7 +505,7 @@ private:
 
 public:
     template <class _Iter, enable_if_t<_Is_iterator_v<_Iter>, int> = 0>
-    vector(_Iter _First, _Iter _Last, const _Alloc& _Al = _Alloc()) : _Mypair(_One_then_variadic_args_t(), _Al) {
+    vector(_Iter _First, _Iter _Last, const _Alloc& _Al = _Alloc()) : _Mypair(_One_then_variadic_args_t{}, _Al) {
         auto&& _Alproxy = _GET_PROXY_ALLOCATOR(_Alty, _Getal());
         _Container_proxy_ptr<_Alty> _Proxy(_Alproxy, _Mypair._Myval2);
         _Adl_verify_range(_First, _Last);
@@ -509,7 +513,7 @@ public:
         _Proxy._Release();
     }
 
-    vector(initializer_list<_Ty> _Ilist, const _Alloc& _Al = _Alloc()) : _Mypair(_One_then_variadic_args_t(), _Al) {
+    vector(initializer_list<_Ty> _Ilist, const _Alloc& _Al = _Alloc()) : _Mypair(_One_then_variadic_args_t{}, _Al) {
         auto&& _Alproxy = _GET_PROXY_ALLOCATOR(_Alty, _Getal());
         _Container_proxy_ptr<_Alty> _Proxy(_Alproxy, _Mypair._Myval2);
         _Range_construct_or_tidy(_Ilist.begin(), _Ilist.end(), random_access_iterator_tag{});
@@ -517,7 +521,7 @@ public:
     }
 
     vector(const vector& _Right)
-        : _Mypair(_One_then_variadic_args_t(), _Alty_traits::select_on_container_copy_construction(_Right._Getal())) {
+        : _Mypair(_One_then_variadic_args_t{}, _Alty_traits::select_on_container_copy_construction(_Right._Getal())) {
         auto&& _Alproxy           = _GET_PROXY_ALLOCATOR(_Alty, _Getal());
         auto& _My_data            = _Mypair._Myval2;
         const auto& _Right_data   = _Right._Mypair._Myval2;
@@ -534,7 +538,7 @@ public:
         _Proxy._Release();
     }
 
-    vector(const vector& _Right, const _Alloc& _Al) : _Mypair(_One_then_variadic_args_t(), _Al) {
+    vector(const vector& _Right, const _Alloc& _Al) : _Mypair(_One_then_variadic_args_t{}, _Al) {
         auto&& _Alproxy           = _GET_PROXY_ALLOCATOR(_Alty, _Getal());
         auto& _My_data            = _Mypair._Myval2;
         const auto& _Right_data   = _Right._Mypair._Myval2;
@@ -557,34 +561,37 @@ private:
     }
 
     void _Move_construct(vector& _Right, false_type) { // move from _Right, possibly moving its contents
-        if
-            _CONSTEXPR_IF(!_Alty_traits::is_always_equal::value) {
-                if (_Getal() != _Right._Getal()) {
-                    const auto& _Right_data   = _Right._Mypair._Myval2;
-                    const pointer _Rightfirst = _Right_data._Myfirst;
-                    const pointer _Rightlast  = _Right_data._Mylast;
-                    if (_Rightfirst != _Rightlast) {
-                        _Buy_raw(static_cast<size_type>(_Rightlast - _Rightfirst));
-                        _Tidy_guard<vector> _Guard{this};
-                        auto& _My_data   = _Mypair._Myval2;
-                        _My_data._Mylast = _Umove(_Rightfirst, _Rightlast, _My_data._Myfirst);
-                        _Guard._Target   = nullptr;
-                    }
-                    return;
+        if _CONSTEXPR_IF (!_Alty_traits::is_always_equal::value) {
+            if (_Getal() != _Right._Getal()) {
+                const auto& _Right_data   = _Right._Mypair._Myval2;
+                const pointer _Rightfirst = _Right_data._Myfirst;
+                const pointer _Rightlast  = _Right_data._Mylast;
+                if (_Rightfirst != _Rightlast) {
+                    _Buy_raw(static_cast<size_type>(_Rightlast - _Rightfirst));
+                    _Tidy_guard<vector> _Guard{this};
+                    auto& _My_data   = _Mypair._Myval2;
+                    _My_data._Mylast = _Umove(_Rightfirst, _Rightlast, _My_data._Myfirst);
+                    _Guard._Target   = nullptr;
                 }
+                return;
             }
+        }
 
         _Move_construct(_Right, true_type{});
     }
 
 public:
-    vector(vector&& _Right) noexcept : _Mypair(_One_then_variadic_args_t(), _STD move(_Right._Getal())) {
+    vector(vector&& _Right) noexcept
+        : _Mypair(_One_then_variadic_args_t{}, _STD move(_Right._Getal()),
+            _STD exchange(_Right._Mypair._Myval2._Myfirst, nullptr),
+            _STD exchange(_Right._Mypair._Myval2._Mylast, nullptr),
+            _STD exchange(_Right._Mypair._Myval2._Myend, nullptr)) {
         _Mypair._Myval2._Alloc_proxy(_GET_PROXY_ALLOCATOR(_Alty, _Getal()));
-        _Move_construct(_Right, true_type{});
+        _Mypair._Myval2._Swap_proxy_and_iterators(_Right._Mypair._Myval2);
     }
 
     vector(vector&& _Right, const _Alloc& _Al) noexcept(_Alty_traits::is_always_equal::value) // strengthened
-        : _Mypair(_One_then_variadic_args_t(), _Al) {
+        : _Mypair(_One_then_variadic_args_t{}, _Al) {
         auto&& _Alproxy = _GET_PROXY_ALLOCATOR(_Alty, _Getal());
         _Container_proxy_ptr<_Alty> _Proxy(_Alproxy, _Mypair._Myval2);
         _Move_construct(_Right, typename _Alty_traits::is_always_equal::type{});
@@ -1292,9 +1299,9 @@ private:
             _Destroy(_Myfirst, _Mylast);
             _Getal().deallocate(_Myfirst, static_cast<size_type>(_Myend - _Myfirst));
 
-            _Myfirst = pointer();
-            _Mylast  = pointer();
-            _Myend   = pointer();
+            _Myfirst = nullptr;
+            _Mylast  = nullptr;
+            _Myend   = nullptr;
         }
 
         _Buy_raw(_Newcapacity);
@@ -1485,7 +1492,7 @@ public:
     }
 
     _NODISCARD size_type max_size() const noexcept {
-        return _Min_value(
+        return (_STD min)(
             static_cast<size_type>((numeric_limits<difference_type>::max)()), _Alty_traits::max_size(_Getal()));
     }
 
@@ -1615,9 +1622,10 @@ private:
     size_type _Calculate_growth(const size_type _Newsize) const {
         // given _Oldcapacity and _Newsize, calculate geometric growth
         const size_type _Oldcapacity = capacity();
+        const auto _Max              = max_size();
 
-        if (_Oldcapacity > max_size() - _Oldcapacity / 2) {
-            return _Newsize; // geometric growth would overflow
+        if (_Oldcapacity > _Max - _Oldcapacity / 2) {
+            return _Max; // geometric growth would overflow
         }
 
         const size_type _Geometric = _Oldcapacity + _Oldcapacity / 2;
@@ -1694,9 +1702,9 @@ private:
             _Destroy(_Myfirst, _Mylast);
             _Getal().deallocate(_Myfirst, static_cast<size_type>(_Myend - _Myfirst));
 
-            _Myfirst = pointer();
-            _Mylast  = pointer();
-            _Myend   = pointer();
+            _Myfirst = nullptr;
+            _Mylast  = nullptr;
+            _Myend   = nullptr;
         }
     }
 
@@ -1744,7 +1752,7 @@ private:
 #if _HAS_CXX17
 template <class _Iter, class _Alloc = allocator<_Iter_value_t<_Iter>>,
     enable_if_t<conjunction_v<_Is_iterator<_Iter>, _Is_allocator<_Alloc>>, int> = 0>
-vector(_Iter, _Iter, _Alloc = _Alloc())->vector<_Iter_value_t<_Iter>, _Alloc>;
+vector(_Iter, _Iter, _Alloc = _Alloc()) -> vector<_Iter_value_t<_Iter>, _Alloc>;
 #endif // _HAS_CXX17
 
 template <class _Ty, class _Alloc>
@@ -1810,14 +1818,14 @@ public:
         this->_Adopt(_Mypvbool);
     }
 
-    void _Advance(_Size_type _Off) {
+    void _Advance(_Size_type _Off) noexcept {
         _Myoff += _Off;
         _Myptr += _Myoff / _VBITS;
         _Myoff %= _VBITS;
     }
 
 #if _ITERATOR_DEBUG_LEVEL != 0
-    _Difference_type _Total_off(const _Mycont* _Cont) const {
+    _Difference_type _Total_off(const _Mycont* _Cont) const noexcept {
         return static_cast<_Difference_type>(_VBITS * (_Myptr - _Cont->_Myvec.data()) + _Myoff);
     }
 #endif // _ITERATOR_DEBUG_LEVEL != 0
@@ -1838,6 +1846,8 @@ class _Vb_reference : public _Vb_iter_base<_Alvbase_wrapped> {
     _Vb_reference() = default;
 
 public:
+    _Vb_reference(const _Vb_reference&) = default;
+
     _Vb_reference(const _Mybase& _Right) noexcept : _Mybase(_Right._Myptr, _Right._Myoff, _Right._Getcont()) {}
 
     _Vb_reference& operator=(const _Vb_reference& _Right) noexcept {
@@ -1862,7 +1872,7 @@ public:
         return (*_Getptr() & _Mask()) != 0;
     }
 
-    const _Vbase* _Getptr() const {
+    const _Vbase* _Getptr() const noexcept {
 #if _ITERATOR_DEBUG_LEVEL != 0
         const auto _Cont = static_cast<const _Mycont*>(this->_Getcont());
         _STL_VERIFY(_Cont, "cannot dereference value-initialized vector<bool> iterator");
@@ -1880,7 +1890,7 @@ public:
     }
 
 protected:
-    _Vbase _Mask() const {
+    _Vbase _Mask() const noexcept {
         return static_cast<_Vbase>(1) << this->_Myoff;
     }
 };
@@ -1908,7 +1918,7 @@ public:
 
     _Vb_const_iterator(const _Vbase* _Ptr, const _Container_base* _Mypvbool) noexcept : _Mybase(_Ptr, 0, _Mypvbool) {}
 
-    _NODISCARD const_reference operator*() const {
+    _NODISCARD const_reference operator*() const noexcept {
 #if _ITERATOR_DEBUG_LEVEL != 0
         const auto _Cont = static_cast<const _Mycont*>(this->_Getcont());
         _STL_VERIFY(_Cont, "cannot dereference value-initialized vector<bool> iterator");
@@ -1919,29 +1929,29 @@ public:
         return _Reft(*this);
     }
 
-    _Vb_const_iterator& operator++() {
+    _Vb_const_iterator& operator++() noexcept {
         _Inc();
         return *this;
     }
 
-    _Vb_const_iterator operator++(int) {
+    _Vb_const_iterator operator++(int) noexcept {
         _Vb_const_iterator _Tmp = *this;
         _Inc();
         return _Tmp;
     }
 
-    _Vb_const_iterator& operator--() {
+    _Vb_const_iterator& operator--() noexcept {
         _Dec();
         return *this;
     }
 
-    _Vb_const_iterator operator--(int) {
+    _Vb_const_iterator operator--(int) noexcept {
         _Vb_const_iterator _Tmp = *this;
         _Dec();
         return _Tmp;
     }
 
-    _Vb_const_iterator& operator+=(const difference_type _Off) {
+    _Vb_const_iterator& operator+=(const difference_type _Off) noexcept {
 #if _ITERATOR_DEBUG_LEVEL != 0
         if (_Off != 0) {
             const auto _Cont = static_cast<const _Mycont*>(this->_Getcont());
@@ -1968,57 +1978,57 @@ public:
         return *this;
     }
 
-    _NODISCARD _Vb_const_iterator operator+(const difference_type _Off) const {
+    _NODISCARD _Vb_const_iterator operator+(const difference_type _Off) const noexcept {
         _Vb_const_iterator _Tmp = *this;
         return _Tmp += _Off;
     }
 
-    _Vb_const_iterator& operator-=(const difference_type _Off) {
+    _Vb_const_iterator& operator-=(const difference_type _Off) noexcept {
         return *this += -_Off;
     }
 
-    _NODISCARD _Vb_const_iterator operator-(const difference_type _Off) const {
+    _NODISCARD _Vb_const_iterator operator-(const difference_type _Off) const noexcept {
         _Vb_const_iterator _Tmp = *this;
         return _Tmp -= _Off;
     }
 
-    _NODISCARD difference_type operator-(const _Vb_const_iterator& _Right) const {
+    _NODISCARD difference_type operator-(const _Vb_const_iterator& _Right) const noexcept {
         _Compat(_Right);
         return static_cast<difference_type>(_VBITS * (this->_Myptr - _Right._Myptr))
                + static_cast<difference_type>(this->_Myoff) - static_cast<difference_type>(_Right._Myoff);
     }
 
-    _NODISCARD const_reference operator[](const difference_type _Off) const {
+    _NODISCARD const_reference operator[](const difference_type _Off) const noexcept {
         return *(*this + _Off);
     }
 
-    _NODISCARD bool operator==(const _Vb_const_iterator& _Right) const {
+    _NODISCARD bool operator==(const _Vb_const_iterator& _Right) const noexcept {
         _Compat(_Right);
         return this->_Myptr == _Right._Myptr && this->_Myoff == _Right._Myoff;
     }
 
-    _NODISCARD bool operator!=(const _Vb_const_iterator& _Right) const {
+    _NODISCARD bool operator!=(const _Vb_const_iterator& _Right) const noexcept {
         return !(*this == _Right);
     }
 
-    _NODISCARD bool operator<(const _Vb_const_iterator& _Right) const {
+    _NODISCARD bool operator<(const _Vb_const_iterator& _Right) const noexcept {
         _Compat(_Right);
         return this->_Myptr < _Right._Myptr || (this->_Myptr == _Right._Myptr && this->_Myoff < _Right._Myoff);
     }
 
-    _NODISCARD bool operator>(const _Vb_const_iterator& _Right) const {
+    _NODISCARD bool operator>(const _Vb_const_iterator& _Right) const noexcept {
         return _Right < *this;
     }
 
-    _NODISCARD bool operator<=(const _Vb_const_iterator& _Right) const {
+    _NODISCARD bool operator<=(const _Vb_const_iterator& _Right) const noexcept {
         return !(_Right < *this);
     }
 
-    _NODISCARD bool operator>=(const _Vb_const_iterator& _Right) const {
+    _NODISCARD bool operator>=(const _Vb_const_iterator& _Right) const noexcept {
         return !(*this < _Right);
     }
 
-    void _Compat(const _Vb_const_iterator& _Right) const { // test for compatible iterator pair
+    void _Compat(const _Vb_const_iterator& _Right) const noexcept { // test for compatible iterator pair
 #if _ITERATOR_DEBUG_LEVEL == 0
         (void) _Right;
 #else // _ITERATOR_DEBUG_LEVEL == 0
@@ -2029,13 +2039,13 @@ public:
 #if _ITERATOR_DEBUG_LEVEL != 0
     using _Prevent_inheriting_unwrap = _Vb_const_iterator;
 
-    friend void _Verify_range(const _Vb_const_iterator& _First, const _Vb_const_iterator& _Last) {
+    friend void _Verify_range(const _Vb_const_iterator& _First, const _Vb_const_iterator& _Last) noexcept {
         // note _Compat check inside <=
         _STL_VERIFY(_First <= _Last, "vector<bool> iterator range transposed");
     }
 #endif // _ITERATOR_DEBUG_LEVEL != 0
 
-    void _Dec() { // decrement bit position
+    void _Dec() noexcept { // decrement bit position
 #if _ITERATOR_DEBUG_LEVEL != 0
         const auto _Cont = static_cast<const _Mycont*>(this->_Getcont());
         _STL_VERIFY(_Cont, "cannot decrement value-initialized vector<bool> iterator");
@@ -2050,7 +2060,7 @@ public:
         }
     }
 
-    void _Inc() { // increment bit position
+    void _Inc() noexcept { // increment bit position
 #if _ITERATOR_DEBUG_LEVEL != 0
         const auto _Cont = static_cast<const _Mycont*>(this->_Getcont());
         _STL_VERIFY(_Cont, "cannot increment value-initialized vector<bool> iterator");
@@ -2069,7 +2079,8 @@ public:
 
 template <class _Alvbase_wrapped>
 _NODISCARD _Vb_const_iterator<_Alvbase_wrapped> operator+(
-    typename _Vb_const_iterator<_Alvbase_wrapped>::difference_type _Off, _Vb_const_iterator<_Alvbase_wrapped> _Right) {
+    typename _Vb_const_iterator<_Alvbase_wrapped>::difference_type _Off,
+    _Vb_const_iterator<_Alvbase_wrapped> _Right) noexcept {
     return _Right += _Off;
 }
 
@@ -2092,7 +2103,7 @@ public:
 
     using _Mybase::_Mybase;
 
-    _NODISCARD reference operator*() const {
+    _NODISCARD reference operator*() const noexcept {
 #if _ITERATOR_DEBUG_LEVEL != 0
         const auto _Cont = static_cast<const _Mycont*>(this->_Getcont());
         _STL_VERIFY(_Cont, "cannot dereference value-initialized vector<bool> iterator");
@@ -2103,51 +2114,51 @@ public:
         return _Reft(*this);
     }
 
-    _Vb_iterator& operator++() {
+    _Vb_iterator& operator++() noexcept {
         _Mybase::operator++();
         return *this;
     }
 
-    _Vb_iterator operator++(int) {
+    _Vb_iterator operator++(int) noexcept {
         _Vb_iterator _Tmp = *this;
         _Mybase::operator++();
         return _Tmp;
     }
 
-    _Vb_iterator& operator--() {
+    _Vb_iterator& operator--() noexcept {
         _Mybase::operator--();
         return *this;
     }
 
-    _Vb_iterator operator--(int) {
+    _Vb_iterator operator--(int) noexcept {
         _Vb_iterator _Tmp = *this;
         _Mybase::operator--();
         return _Tmp;
     }
 
-    _Vb_iterator& operator+=(const difference_type _Off) {
+    _Vb_iterator& operator+=(const difference_type _Off) noexcept {
         _Mybase::operator+=(_Off);
         return *this;
     }
 
-    _NODISCARD _Vb_iterator operator+(const difference_type _Off) const {
+    _NODISCARD _Vb_iterator operator+(const difference_type _Off) const noexcept {
         _Vb_iterator _Tmp = *this;
         return _Tmp += _Off;
     }
 
-    _Vb_iterator& operator-=(const difference_type _Off) {
+    _Vb_iterator& operator-=(const difference_type _Off) noexcept {
         _Mybase::operator-=(_Off);
         return *this;
     }
 
     using _Mybase::operator-;
 
-    _NODISCARD _Vb_iterator operator-(const difference_type _Off) const {
+    _NODISCARD _Vb_iterator operator-(const difference_type _Off) const noexcept {
         _Vb_iterator _Tmp = *this;
         return _Tmp -= _Off;
     }
 
-    _NODISCARD reference operator[](const difference_type _Off) const {
+    _NODISCARD reference operator[](const difference_type _Off) const noexcept {
         return *(*this + _Off);
     }
 
@@ -2156,7 +2167,7 @@ public:
 
 template <class _Alvbase_wrapped>
 _NODISCARD _Vb_iterator<_Alvbase_wrapped> operator+(
-    typename _Vb_iterator<_Alvbase_wrapped>::difference_type _Off, _Vb_iterator<_Alvbase_wrapped> _Right) {
+    typename _Vb_iterator<_Alvbase_wrapped>::difference_type _Off, _Vb_iterator<_Alvbase_wrapped> _Right) noexcept {
     return _Right += _Off;
 }
 
@@ -2228,7 +2239,7 @@ public:
         return _Myvec._Getal();
     }
 
-    static size_type _Nw(size_type _Count) {
+    static size_type _Nw(size_type _Count) noexcept {
         return (_Count + _VBITS - 1) / _VBITS;
     }
 
@@ -2304,12 +2315,11 @@ public:
 
     vector(vector&& _Right, const _Alloc& _Al) noexcept(is_nothrow_constructible_v<_Mybase, _Mybase, const _Alloc&>)
         : _Mybase(_STD move(_Right), _Al) {
-        if
-            _CONSTEXPR_IF(!_Alvbase_traits::is_always_equal::value) {
-                if (this->_Getal() != _Right._Getal()) {
-                    return;
-                }
+        if _CONSTEXPR_IF (!_Alvbase_traits::is_always_equal::value) {
+            if (this->_Getal() != _Right._Getal()) {
+                return;
             }
+        }
 
         this->_Swap_proxy_and_iterators(_Right);
     }
@@ -2659,7 +2669,7 @@ public:
     template <class _Iter, enable_if_t<_Is_iterator_v<_Iter>, int> = 0>
     iterator insert(const_iterator _Where, _Iter _First, _Iter _Last) {
         difference_type _Off = _Where - begin();
-        _Insert(_Where, _First, _Last, _Iter_cat_t<_Iter>());
+        _Insert(_Where, _First, _Last, _Iter_cat_t<_Iter>{});
         return begin() + _Off;
     }
 
@@ -2686,11 +2696,11 @@ public:
 
 #if _ITERATOR_DEBUG_LEVEL == 2
         _STL_VERIFY(end() > _Where, "vector<bool> erase iterator outside range");
-        _STD copy(_Where + 1, end(), _Where);
+        _STD copy(_Next_iter(_Where), end(), _Where);
         _Orphan_range(static_cast<size_type>(_Off), this->_Mysize);
 
 #else // _ITERATOR_DEBUG_LEVEL == 2
-        _STD copy(_Where + 1, end(), _Where);
+        _STD copy(_Next_iter(_Where), end(), _Where);
 #endif // _ITERATOR_DEBUG_LEVEL == 2
 
         _Trim(this->_Mysize - 1);
@@ -2847,8 +2857,8 @@ _NODISCARD bool operator!=(const vector<bool, _Alloc>& _Left, const vector<bool,
 // STRUCT TEMPLATE SPECIALIZATION hash
 template <class _Alloc>
 struct hash<vector<bool, _Alloc>> {
-    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef vector<bool, _Alloc> argument_type;
-    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef size_t result_type;
+    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef vector<bool, _Alloc> _ARGUMENT_TYPE_NAME;
+    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef size_t _RESULT_TYPE_NAME;
 
     _NODISCARD size_t operator()(const vector<bool, _Alloc>& _Keyval) const noexcept {
         return _Hash_array_representation(_Keyval._Myvec.data(), _Keyval._Myvec.size());
@@ -2857,13 +2867,13 @@ struct hash<vector<bool, _Alloc>> {
 
 #if _HAS_CXX20
 template <class _Ty, class _Alloc, class _Uty>
-void erase(vector<_Ty, _Alloc>& _Cont, const _Uty& _Val) {
-    _Erase_remove(_Cont, _Val);
+typename vector<_Ty, _Alloc>::size_type erase(vector<_Ty, _Alloc>& _Cont, const _Uty& _Val) {
+    return _Erase_remove(_Cont, _Val);
 }
 
 template <class _Ty, class _Alloc, class _Pr>
-void erase_if(vector<_Ty, _Alloc>& _Cont, _Pr _Pred) {
-    _Erase_remove_if(_Cont, _Pass_fn(_Pred));
+typename vector<_Ty, _Alloc>::size_type erase_if(vector<_Ty, _Alloc>& _Cont, _Pr _Pred) {
+    return _Erase_remove_if(_Cont, _Pass_fn(_Pred));
 }
 #endif // _HAS_CXX20
 
@@ -2873,6 +2883,65 @@ namespace pmr {
     using vector = _STD vector<_Ty, polymorphic_allocator<_Ty>>;
 } // namespace pmr
 #endif // _HAS_CXX17
+
+#if _HAS_IF_CONSTEXPR
+// VARIABLE TEMPLATE _Is_vb_iterator
+template <class _Alloc, bool _RequiresMutable>
+_INLINE_VAR constexpr bool _Is_vb_iterator<_Vb_iterator<_Alloc>, _RequiresMutable> = true;
+
+template <class _Alloc>
+_INLINE_VAR constexpr bool _Is_vb_iterator<_Vb_const_iterator<_Alloc>, false> = true;
+
+template <class _FwdIt, class _Ty>
+_CONSTEXPR20 void _Fill_vbool(_FwdIt _First, _FwdIt _Last, const _Ty& _Val) {
+    // Set [_First, _Last) to _Val
+    if (_First == _Last) {
+        return;
+    }
+
+    _Vbase* _VbFirst      = const_cast<_Vbase*>(_First._Myptr);
+    _Vbase* const _VbLast = const_cast<_Vbase*>(_Last._Myptr);
+
+    const auto _FirstSourceMask = static_cast<_Vbase>(-1) << _First._Myoff;
+    const auto _FirstDestMask   = ~_FirstSourceMask;
+    const auto _FillVal         = static_cast<_Vbase>(_Val ? -1 : 0);
+
+    if (_VbFirst == _VbLast) {
+        // We already excluded _First == _Last, so here _Last._Myoff > 0 and the shift is safe
+        const auto _LastSourceMask = static_cast<_Vbase>(-1) >> (_VBITS - _Last._Myoff);
+        const auto _LastDestMask   = ~_LastSourceMask;
+        const auto _SourceMask     = _FirstSourceMask & _LastSourceMask;
+        const auto _DestMask       = _FirstDestMask | _LastDestMask;
+        *_VbFirst                  = (*_VbFirst & _DestMask) | (_FillVal & _SourceMask);
+        return;
+    }
+
+    *_VbFirst = (*_VbFirst & _FirstDestMask) | (_FillVal & _FirstSourceMask);
+    ++_VbFirst;
+
+#ifdef __cpp_lib_is_constant_evaluated
+    if (_STD is_constant_evaluated()) {
+        for (; _VbFirst != _VbLast; ++_VbFirst) {
+            *_VbFirst = _FillVal;
+        }
+    } else
+#endif // __cpp_lib_is_constant_evaluated
+    {
+        const auto _VbFirst_ch = reinterpret_cast<const char*>(_VbFirst);
+        const auto _VbLast_ch  = reinterpret_cast<const char*>(_VbLast);
+        const auto _Count_ch   = static_cast<size_t>(_VbLast_ch - _VbFirst_ch);
+        const auto _ValChar    = static_cast<unsigned char>(_Val ? -1 : 0);
+        _CSTD memset(_VbFirst, _ValChar, _Count_ch);
+        _VbFirst = _VbLast;
+    }
+
+    if (_Last._Myoff != 0) {
+        const auto _LastSourceMask = static_cast<_Vbase>(-1) >> (_VBITS - _Last._Myoff);
+        const auto _LastDestMask   = ~_LastSourceMask;
+        *_VbFirst                  = (*_VbFirst & _LastDestMask) | (_FillVal & _LastSourceMask);
+    }
+}
+#endif // _HAS_IF_CONSTEXPR
 _STD_END
 
 #pragma pop_macro("new")

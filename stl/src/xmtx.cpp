@@ -3,16 +3,16 @@
 
 // mutex support
 
-#include "xmtx.h"
+#include "xmtx.hpp"
 
-#include "awint.h"
+#include "awint.hpp"
 
 _EXTERN_C_UNLESS_PURE
 
 // Win32 critical sections are recursive
 
 void __CLRCALL_PURE_OR_CDECL _Mtxinit(_Rmtx* _Mtx) noexcept { // initialize mutex
-    __crtInitializeCriticalSectionEx(_Mtx, 4000, 0);
+    InitializeCriticalSectionEx(_Mtx, 4000, 0);
 }
 
 void __CLRCALL_PURE_OR_CDECL _Mtxdst(_Rmtx* _Mtx) noexcept { // delete mutex

@@ -11,6 +11,9 @@
 
 #include <intrin0.h>
 #include <type_traits>
+#if defined(_WIN64) && (_MSC_FULL_VER <= 192829213) // TRANSITION
+#include <intrin.h> // Visual Studio 2019 to define 128-bit CAS in <intrin0.h>
+#endif // defined(_WIN64) && (_MSC_FULL_VER <= 192829213), TRANSITION
 
 #pragma pack(push, _CRT_PACKING)
 #pragma warning(push, _STL_WARNING_LEVEL)
@@ -19,15 +22,18 @@ _STL_DISABLE_CLANG_WARNINGS
 #pragma push_macro("new")
 #undef new
 
+#define _CONCATX(x, y) x##y
+#define _CONCAT(x, y)  _CONCATX(x, y)
+
 // Interlocked intrinsic mapping for _nf/_acq/_rel
-#if defined(_M_CEE_PURE) || defined(_M_IX86) || defined(_M_X64)
+#if defined(_M_CEE_PURE) || defined(_M_IX86) || (defined(_M_X64) && !defined(_M_ARM64EC))
 #define _INTRIN_RELAXED(x) x
 #define _INTRIN_ACQUIRE(x) x
 #define _INTRIN_RELEASE(x) x
 #define _INTRIN_ACQ_REL(x) x
 #define _YIELD_PROCESSOR()
 
-#elif defined(_M_ARM) || defined(_M_ARM64)
+#elif defined(_M_ARM) || defined(_M_ARM64) || defined(_M_ARM64EC)
 #define _INTRIN_RELAXED(x) _CONCAT(x, _nf)
 #define _INTRIN_ACQUIRE(x) _CONCAT(x, _acq)
 #define _INTRIN_RELEASE(x) _CONCAT(x, _rel)
@@ -42,16 +48,6 @@ _STL_DISABLE_CLANG_WARNINGS
 
 #define _MT_INCR(x) _INTRIN_RELAXED(_InterlockedIncrement)(reinterpret_cast<volatile long*>(&x))
 #define _MT_DECR(x) _INTRIN_ACQ_REL(_InterlockedDecrement)(reinterpret_cast<volatile long*>(&x))
-
-#if defined(_M_CEE_PURE) || defined(_M_IX86) || defined(_M_X64)
-#define _ISO_VOLATILE_LOAD32(_Storage) (*_Atomic_address_as<const long>(_Storage))
-
-#elif defined(_M_ARM) || defined(_M_ARM64)
-#define _ISO_VOLATILE_LOAD32(_Storage) __iso_volatile_load32(_Atomic_address_as<const int>(_Storage))
-
-#else // ^^^ ARM32/ARM64 / unsupported hardware vvv
-#error Unsupported hardware
-#endif // hardware
 
 _STD_BEGIN
 
@@ -99,6 +95,13 @@ _NODISCARD volatile _Integral* _Atomic_address_as(_Ty& _Source) noexcept {
     // gets a pointer to the argument as an integral type (to pass to intrinsics)
     static_assert(is_integral_v<_Integral>, "Tried to reinterpret memory as non-integral");
     return &reinterpret_cast<volatile _Integral&>(_Source);
+}
+
+template <class _Integral, class _Ty>
+_NODISCARD const volatile _Integral* _Atomic_address_as(const _Ty& _Source) noexcept {
+    // gets a pointer to the argument as an integral type (to pass to intrinsics)
+    static_assert(is_integral_v<_Integral>, "Tried to reinterpret memory as non-integral");
+    return &reinterpret_cast<const volatile _Integral&>(_Source);
 }
 
 _STD_END

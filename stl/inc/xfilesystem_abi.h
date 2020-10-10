@@ -33,6 +33,7 @@ enum class __std_win_error : unsigned long {
     _No_more_files             = 18, // #define ERROR_NO_MORE_FILES              18L
     _Sharing_violation         = 32, // #define ERROR_SHARING_VIOLATION          32L
     _Not_supported             = 50, // #define ERROR_NOT_SUPPORTED              50L
+    _Error_bad_netpath         = 53, // #define ERROR_BAD_NETPATH                53L
     _File_exists               = 80, // #define ERROR_FILE_EXISTS                80L
     _Invalid_parameter         = 87, // #define ERROR_INVALID_PARAMETER          87L
     _Insufficient_buffer       = 122, // #define ERROR_INSUFFICIENT_BUFFER        122L
@@ -43,6 +44,22 @@ enum class __std_win_error : unsigned long {
     _Directory_name_is_invalid = 267, // #define ERROR_DIRECTORY                  267L
     _Max                       = ~0UL // sentinel not used by Win32
 };
+
+// FUNCTION __std_is_file_not_found
+#pragma warning(push)
+#pragma warning(disable : 4061) // enumerator not explicitly handled by switch label
+_NODISCARD inline bool __std_is_file_not_found(const __std_win_error _Error) noexcept {
+    switch (_Error) {
+    case __std_win_error::_File_not_found:
+    case __std_win_error::_Path_not_found:
+    case __std_win_error::_Error_bad_netpath:
+    case __std_win_error::_Invalid_name:
+        return true;
+    default:
+        return false;
+    }
+}
+#pragma warning(pop)
 
 enum class __std_fs_dir_handle : intptr_t { _Invalid = -1 };
 
@@ -222,8 +239,9 @@ _NODISCARD __std_win_error __stdcall __std_fs_open_handle(_Out_ __std_fs_file_ha
 
 void __stdcall __std_fs_close_handle(__std_fs_file_handle _Handle) noexcept;
 
-_NODISCARD __std_win_error __stdcall __std_fs_get_file_attributes_by_handle(
-    _In_ __std_fs_file_handle _Handle, _Out_ unsigned long* _File_attributes) noexcept;
+_NODISCARD _Success_(return == __std_win_error::_Success) __std_win_error
+    __stdcall __std_fs_get_file_attributes_by_handle(
+        _In_ __std_fs_file_handle _Handle, _Out_ unsigned long* _File_attributes) noexcept;
 
 _NODISCARD __std_ulong_and_error __stdcall __std_fs_get_final_path_name_by_handle(_In_ __std_fs_file_handle _Handle,
     _Out_writes_z_(_Target_size) wchar_t* _Target, _In_ unsigned long _Target_size,
@@ -242,9 +260,9 @@ _NODISCARD __std_win_error __stdcall __std_fs_directory_iterator_open(_In_z_ con
 
 void __stdcall __std_fs_directory_iterator_close(_In_ __std_fs_dir_handle _Handle) noexcept;
 
-_NODISCARD __std_win_error __stdcall __std_fs_get_stats(_In_z_ const wchar_t* _Path, _Out_ __std_fs_stats* _Stats,
-    _In_ __std_fs_stats_flags _Flags,
-    _In_ __std_fs_file_attr _Symlink_attribute_hint = __std_fs_file_attr::_Invalid) noexcept;
+_NODISCARD _Success_(return == __std_win_error::_Success) __std_win_error
+    __stdcall __std_fs_get_stats(_In_z_ const wchar_t* _Path, __std_fs_stats* _Stats, _In_ __std_fs_stats_flags _Flags,
+        _In_ __std_fs_file_attr _Symlink_attribute_hint = __std_fs_file_attr::_Invalid) noexcept;
 
 _NODISCARD __std_win_error __stdcall __std_fs_directory_iterator_advance(
     _In_ __std_fs_dir_handle _Handle, _Out_ __std_fs_find_data* _Results) noexcept;
@@ -259,8 +277,12 @@ _NODISCARD __std_fs_convert_result __stdcall __std_fs_convert_wide_to_narrow(_In
     _In_reads_(_Input_len) const wchar_t* _Input_str, _In_ int _Input_len,
     _Out_writes_opt_(_Output_len) char* _Output_str, _In_ int _Output_len) noexcept;
 
-_NODISCARD __std_win_error __stdcall __std_fs_get_file_id(
-    _Out_ __std_fs_file_id* _Id, _In_z_ const wchar_t* _Path) noexcept;
+_NODISCARD __std_fs_convert_result __stdcall __std_fs_convert_wide_to_narrow_replace_chars(
+    _In_ __std_code_page _Code_page, _In_reads_(_Input_len) const wchar_t* _Input_str, _In_ int _Input_len,
+    _Out_writes_opt_(_Output_len) char* _Output_str, _In_ int _Output_len) noexcept;
+
+_NODISCARD _Success_(return == __std_win_error::_Success) __std_win_error
+    __stdcall __std_fs_get_file_id(_Out_ __std_fs_file_id* _Id, _In_z_ const wchar_t* _Path) noexcept;
 
 _NODISCARD __std_win_error __stdcall __std_fs_set_last_write_time(
     _In_ long long _Last_write_filetime, _In_z_ const wchar_t* _Path) noexcept;
@@ -268,11 +290,12 @@ _NODISCARD __std_win_error __stdcall __std_fs_set_last_write_time(
 _NODISCARD __std_win_error __stdcall __std_fs_change_permissions(
     _In_z_ const wchar_t* _Path, _In_ bool _Follow_symlinks, _In_ bool _Readonly) noexcept;
 
-_NODISCARD __std_ulong_and_error __stdcall __std_fs_get_temp_path(
-    _Out_writes_z_(__std_fs_temp_path_max) wchar_t* _Target) noexcept;
+_NODISCARD _Success_(return._Error == __std_win_error::_Success) __std_ulong_and_error
+    __stdcall __std_fs_get_temp_path(_Out_writes_z_(__std_fs_temp_path_max) wchar_t* _Target) noexcept;
 
-_NODISCARD __std_ulong_and_error __stdcall __std_fs_get_current_path(
-    _In_ unsigned long _Target_size, _Out_writes_z_(_Target_size) wchar_t* _Target) noexcept;
+_NODISCARD _Success_(return._Error == __std_win_error::_Success) __std_ulong_and_error
+    __stdcall __std_fs_get_current_path(
+        _In_ unsigned long _Target_size, _Out_writes_z_(_Target_size) wchar_t* _Target) noexcept;
 
 _NODISCARD __std_win_error __stdcall __std_fs_set_current_path(_In_z_ const wchar_t* _Target) noexcept;
 
@@ -288,8 +311,9 @@ _NODISCARD __std_win_error __stdcall __std_fs_create_symbolic_link(
 _NODISCARD __std_win_error __stdcall __std_fs_read_reparse_data_buffer(_In_ __std_fs_file_handle _Handle,
     _Out_writes_bytes_(_Buffer_size) void* _Buffer, _In_ unsigned long _Buffer_size) noexcept;
 
-_NODISCARD __std_win_error __stdcall __std_fs_read_name_from_reparse_data_buffer(
-    _In_ __std_fs_reparse_data_buffer* _Handle, _Out_ wchar_t** _Offset, _Out_ unsigned short* _Length) noexcept;
+_NODISCARD _Success_(return == __std_win_error::_Success) __std_win_error
+    __stdcall __std_fs_read_name_from_reparse_data_buffer(
+        _In_ __std_fs_reparse_data_buffer* _Handle, _Out_ wchar_t** _Offset, _Out_ unsigned short* _Length) noexcept;
 
 struct __std_fs_create_directory_result {
     bool _Created;

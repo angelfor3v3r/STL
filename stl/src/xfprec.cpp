@@ -3,6 +3,5 @@
 
 // _FXp* functions
 
-#include "xmath.h"
-#include "xxfftype.h"
-#include "xxxprec.h"
+#include "xxfftype.hpp"
+#include "xxxprec.hpp"

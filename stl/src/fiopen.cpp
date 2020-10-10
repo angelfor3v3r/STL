@@ -11,14 +11,14 @@ _STD_BEGIN
 
 FILE* _Xfsopen(_In_z_ const char* filename, _In_ int mode, _In_ int prot) {
     static const char* const mods[] = {// fopen mode strings corresponding to valid[i]
-        "r", "w", "w", "a", "rb", "wb", "wb", "ab", "r+", "w+", "a+", "r+b", "w+b", "a+b", 0};
+        "r", "w", "w", "a", "rb", "wb", "wb", "ab", "r+", "w+", "a+", "r+b", "w+b", "a+b", nullptr};
 
     return _fsopen(filename, mods[mode], prot);
 }
 
 FILE* _Xfsopen(_In_z_ const wchar_t* filename, _In_ int mode, _In_ int prot) {
     static const wchar_t* const mods[] = {// fopen mode strings corresponding to valid[i]
-        L"r", L"w", L"w", L"a", L"rb", L"wb", L"wb", L"ab", L"r+", L"w+", L"a+", L"r+b", L"w+b", L"a+b", 0};
+        L"r", L"w", L"w", L"a", L"rb", L"wb", L"wb", L"ab", L"r+", L"w+", L"a+", L"r+b", L"w+b", L"a+b", nullptr};
 
     return _wfsopen(filename, mods[mode], prot);
 }
@@ -44,7 +44,7 @@ FILE* _Xfiopen(const CharT* filename, ios_base::openmode mode, int prot) {
         0,
     };
 
-    FILE* fp                     = 0;
+    FILE* fp                     = nullptr;
     ios_base::openmode atendflag = mode & ios_base::ate;
     ios_base::openmode norepflag = mode & ios_base::_Noreplace;
 
@@ -64,21 +64,21 @@ FILE* _Xfiopen(const CharT* filename, ios_base::openmode mode, int prot) {
     }
 
     if (valid[n] == 0) {
-        return 0; // no valid mode
+        return nullptr; // no valid mode
     }
 
     if (norepflag && (mode & (ios_base::out | ios_base::app))
-        && (fp = _Xfsopen(filename, 0, prot)) != 0) { // file must not exist, close and fail
+        && (fp = _Xfsopen(filename, 0, prot)) != nullptr) { // file must not exist, close and fail
         fclose(fp);
-        return 0;
+        return nullptr;
     }
 
-    if (fp != 0 && fclose(fp) != 0) {
-        return 0; // can't close after test open
+    if (fp != nullptr && fclose(fp) != 0) {
+        return nullptr; // can't close after test open
     }
 
-    if ((fp = _Xfsopen(filename, n, prot)) == 0) {
-        return 0; // open failed
+    if ((fp = _Xfsopen(filename, n, prot)) == nullptr) {
+        return nullptr; // open failed
     }
 
     if (!atendflag || fseek(fp, 0, SEEK_END) == 0) {
@@ -86,7 +86,7 @@ FILE* _Xfiopen(const CharT* filename, ios_base::openmode mode, int prot) {
     }
 
     fclose(fp); // can't position at end
-    return 0;
+    return nullptr;
 }
 
 _CRTIMP2_PURE FILE* __CLRCALL_PURE_OR_CDECL _Fiopen(
@@ -102,7 +102,7 @@ _CRTIMP2_PURE FILE* __CLRCALL_PURE_OR_CDECL _Fiopen(
 #ifdef _NATIVE_WCHAR_T_DEFINED
 _CRTIMP2_PURE FILE* __CLRCALL_PURE_OR_CDECL _Fiopen(
     const unsigned short* _Filename, ios_base::openmode _Mode, int _Prot) { // open file with wide name
-    return _Fiopen((wchar_t*) (_Filename), _Mode, _Prot);
+    return _Fiopen(reinterpret_cast<const wchar_t*>(_Filename), _Mode, _Prot);
 }
 #endif
 

@@ -132,6 +132,11 @@ public:
                 }
 
                 _First = do_get(_First, _Last, _Iosbase, _State, _Pt, _Specifier, _Modifier); // convert a single field
+
+                if (_State != ios_base::goodbit) {
+                    // _State is fail, eof, or bad. Do not proceed to the next fields. Return with current _State.
+                    break;
+                }
             }
         }
 
@@ -534,7 +539,8 @@ protected:
 private:
     ios_base::iostate __CLRCALL_OR_CDECL _Getint(_InIt& _First, _InIt& _Last, int _Lo, int _Hi, int& _Val,
         const _Ctype& _Ctype_fac) const { // get integer in range [_Lo, _Hi] from [_First, _Last)
-        char _Ac[_MAX_INT_DIG], *_Ep;
+        char _Ac[_MAX_INT_DIG];
+        char* _Ep;
         char* _Ptr = _Ac;
         char _Ch;
 
@@ -622,12 +628,10 @@ public:
     static_assert(!_ENFORCE_FACET_SPECIALIZATIONS || _Is_any_of_v<_Elem, char, wchar_t>, _FACET_SPECIALIZATION_MESSAGE);
 
     explicit time_get_byname(const char* _Locname, size_t _Refs = 0)
-        : time_get<_Elem, _InIt>(_Locname, _Refs) { // construct for named locale
-    }
+        : time_get<_Elem, _InIt>(_Locname, _Refs) {} // construct for named locale
 
     explicit time_get_byname(const string& _Str, size_t _Refs = 0)
-        : time_get<_Elem, _InIt>(_Locinfo(_Str.c_str()), _Refs) { // construct for named locale
-    }
+        : time_get<_Elem, _InIt>(_Locinfo(_Str.c_str()), _Refs) {} // construct for named locale
 
 protected:
     virtual __CLR_OR_THIS_CALL ~time_get_byname() noexcept {}
@@ -1010,12 +1014,10 @@ public:
     static_assert(!_ENFORCE_FACET_SPECIALIZATIONS || _Is_any_of_v<_Elem, char, wchar_t>, _FACET_SPECIALIZATION_MESSAGE);
 
     explicit time_put_byname(const char* _Locname, size_t _Refs = 0)
-        : time_put<_Elem, _OutIt>(_Locname, _Refs) { // construct for named locale
-    }
+        : time_put<_Elem, _OutIt>(_Locname, _Refs) {} // construct for named locale
 
     explicit time_put_byname(const string& _Str, size_t _Refs = 0)
-        : time_put<_Elem, _OutIt>(_Str.c_str(), _Refs) { // construct for named locale
-    }
+        : time_put<_Elem, _OutIt>(_Str.c_str(), _Refs) {} // construct for named locale
 
 protected:
     virtual __CLR_OR_THIS_CALL ~time_put_byname() noexcept {}

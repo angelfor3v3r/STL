@@ -85,8 +85,7 @@ struct _CRTIMP2_PURE_IMPORT _Crt_new_delete { // base class for marking allocati
         return _Ptr;
     }
 
-    void __CLRCALL_OR_CDECL operator delete(void*, void*) noexcept { // imitate True Placement Delete
-    }
+    void __CLRCALL_OR_CDECL operator delete(void*, void*) noexcept {} // imitate True Placement Delete
 #endif // _DEBUG
 };
 
@@ -462,49 +461,6 @@ const _Facet& __CRTDECL use_facet(const locale& _Loc) { // get facet reference f
     _END_LOCK()
 } // end of use_facet body
 
-// FUNCTION TEMPLATE _Getloctxt
-template <class _Elem, class _InIt>
-int __CRTDECL _Getloctxt(_InIt& _First, _InIt& _Last, size_t _Numfields, const _Elem* _Ptr) {
-    // find field at _Ptr that matches longest in [_First, _Last)
-    for (size_t _Off = 0; _Ptr[_Off] != _Elem{}; ++_Off) {
-        if (_Ptr[_Off] == _Ptr[0]) {
-            ++_Numfields; // add fields with leading mark to initial count
-        }
-    }
-
-    string _Str(_Numfields, '\0'); // one column counter for each field
-
-    int _Ans = -2; // no candidates so far
-    for (size_t _Column = 1;; ++_Column, (void) ++_First, _Ans = -1) { // test each element against all viable fields
-        bool _Prefix  = false; // seen at least one valid prefix
-        size_t _Off   = 0; // offset into fields
-        size_t _Field = 0; // current field number
-
-        for (; _Field < _Numfields; ++_Field) { // test element at _Column in field _Field
-            while (_Ptr[_Off] != _Elem{} && _Ptr[_Off] != _Ptr[0]) { // find beginning of field
-                ++_Off;
-            }
-
-            if (_Str[_Field] != '\0') {
-                _Off += _Str[_Field]; // skip tested columns in field
-            } else if (_Ptr[_Off += _Column] == _Ptr[0]
-                       || _Ptr[_Off] == _Elem{}) { // matched all of field, save as possible answer
-                _Str[_Field] = static_cast<char>(_Column < 127 ? _Column : 127); // save skip count if small enough
-                _Ans         = static_cast<int>(_Field); // save answer
-            } else if (_First == _Last || _Ptr[_Off] != *_First) {
-                _Str[_Field] = static_cast<char>(_Column < 127 ? _Column : 127); // no match, just save skip count
-            } else {
-                _Prefix = true; // still a valid prefix
-            }
-        }
-
-        if (!_Prefix || _First == _Last) {
-            break; // no pending prefixes or no input, give up
-        }
-    }
-    return _Ans; // return field number or negative value on failure
-}
-
 // FUNCTION TEMPLATE _Maklocbyte
 template <class _Elem>
 char __CRTDECL _Maklocbyte(_Elem _Char, const _Locinfo::_Cvtvec&) {
@@ -776,13 +732,9 @@ protected:
         _Elem* _First2, _Elem* _Last2, _Elem*& _Mid2) const { // convert bytes [_First1, _Last1) to [_First2, _Last2)
         _Mid1 = _First1;
         _Mid2 = _First2;
-        if
-            _CONSTEXPR_IF(is_same_v<_Byte, _Elem>) {
-                (void) _Last1;
-                (void) _Last2;
-                return noconv; // convert nothing
-            }
-        else {
+        if _CONSTEXPR_IF (is_same_v<_Byte, _Elem>) {
+            return noconv; // convert nothing
+        } else {
             // types differ, copy one for one
             for (; _Mid1 != _Last1; ++_Mid1, ++_Mid2) {
                 if (_Mid2 == _Last2) {
@@ -799,13 +751,9 @@ protected:
         _Byte* _First2, _Byte* _Last2, _Byte*& _Mid2) const { // convert [_First1, _Last1) to bytes [_First2, _Last2)
         _Mid1 = _First1;
         _Mid2 = _First2;
-        if
-            _CONSTEXPR_IF(is_same_v<_Byte, _Elem>) {
-                (void) _Last1;
-                (void) _Last2;
-                return noconv; // convert nothing
-            }
-        else {
+        if _CONSTEXPR_IF (is_same_v<_Byte, _Elem>) {
+            return noconv; // convert nothing
+        } else {
             // types differ, copy one for one
             for (; _Mid1 != _Last1; ++_Mid1, ++_Mid2) {
                 if (_Mid2 == _Last2) {
@@ -829,8 +777,8 @@ protected:
         // return p - _First1, for the largest value p in [_First1, _Last1] such that [_First1, p) successfully
         // converts to at most _Count _Elems
         // assumes 1:1 conversion
-        const auto _Dist = static_cast<size_t>(_Min_value(_Last1 - _First1, ptrdiff_t{INT_MAX}));
-        return static_cast<int>(_Min_value(_Count, _Dist));
+        const auto _Dist = static_cast<size_t>((_STD min)(_Last1 - _First1, ptrdiff_t{INT_MAX}));
+        return static_cast<int>((_STD min)(_Count, _Dist));
     }
 };
 
@@ -874,7 +822,7 @@ _NODISCARD int _Codecvt_do_length(
 
         if (_Result != codecvt_base::ok) {
             if (_Result == codecvt_base::noconv) {
-                _First1 += _Min_value(static_cast<size_t>(_Last1 - _First1), _Count);
+                _First1 += (_STD min)(static_cast<size_t>(_Last1 - _First1), _Count);
             }
 
             break; // error, noconv, or partial
@@ -887,7 +835,7 @@ _NODISCARD int _Codecvt_do_length(
         _First1 = _Mid1;
     }
 
-    return static_cast<int>(_Min_value(_First1 - _Old_first1, ptrdiff_t{INT_MAX}));
+    return static_cast<int>((_STD min)(_First1 - _Old_first1, ptrdiff_t{INT_MAX}));
 }
 
 // ENUM _Codecvt_mode
@@ -1710,7 +1658,7 @@ protected:
             _First1 = _Peek;
         }
 
-        return static_cast<int>(_Min_value(_First1 - _Old_first1, ptrdiff_t{INT_MAX}));
+        return static_cast<int>((_STD min)(_First1 - _Old_first1, ptrdiff_t{INT_MAX}));
     }
 
     virtual bool __CLR_OR_THIS_CALL do_always_noconv() const noexcept override {
@@ -1953,7 +1901,7 @@ protected:
             _First1 = _Peek;
         }
 
-        return static_cast<int>(_Min_value(_First1 - _Old_first1, ptrdiff_t{INT_MAX}));
+        return static_cast<int>((_STD min)(_First1 - _Old_first1, ptrdiff_t{INT_MAX}));
     }
 
     virtual bool __CLR_OR_THIS_CALL do_always_noconv() const noexcept override {
@@ -2150,7 +2098,7 @@ protected:
             _First1 += _Bytes;
         }
 
-        return static_cast<int>(_Min_value(_First1 - _Old_first1, ptrdiff_t{INT_MAX}));
+        return static_cast<int>((_STD min)(_First1 - _Old_first1, ptrdiff_t{INT_MAX}));
     }
 
     virtual bool __CLR_OR_THIS_CALL do_always_noconv() const noexcept override {
@@ -2352,7 +2300,7 @@ protected:
             _First1 += _Bytes;
         }
 
-        return static_cast<int>(_Min_value(_First1 - _Old_first1, ptrdiff_t{INT_MAX}));
+        return static_cast<int>((_STD min)(_First1 - _Old_first1, ptrdiff_t{INT_MAX}));
     }
 
     virtual bool __CLR_OR_THIS_CALL do_always_noconv() const noexcept override {
@@ -2397,6 +2345,17 @@ protected:
     virtual __CLR_OR_THIS_CALL ~codecvt_byname() noexcept {}
 };
 
+// CTYPE CODE BITS
+#define _XA 0x100 // extra alphabetic
+#define _BB _CONTROL // BEL, BS, etc.
+#define _CN _SPACE // CR, FF, HT, NL, VT
+#define _DI _DIGIT // '0'-'9'
+#define _LO _LOWER // 'a'-'z'
+#define _PU _PUNCT // punctuation
+#define _SP _BLANK // space
+#define _UP _UPPER // 'A'-'Z'
+#define _XD _HEX // '0'-'9', 'A'-'F', 'a'-'f'
+
 // STRUCT ctype_base
 struct _CRTIMP2_PURE_IMPORT ctype_base : locale::facet { // base for ctype
     enum { // constants for character classifications
@@ -2408,10 +2367,10 @@ struct _CRTIMP2_PURE_IMPORT ctype_base : locale::facet { // base for ctype
         lower  = _LO,
         print  = _DI | _LO | _PU | _SP | _UP | _XA | _XD,
         punct  = _PU,
-        space  = _CN | _SP | _XS,
+        space  = _CN | _SP,
         upper  = _UP,
         xdigit = _XD,
-        blank  = _CN | _SP | _XS | _XB
+        blank  = _CN | _SP
     };
     using mask = short; // to match <ctype.h>
 
@@ -2419,6 +2378,16 @@ struct _CRTIMP2_PURE_IMPORT ctype_base : locale::facet { // base for ctype
 
     __CLR_OR_THIS_CALL ~ctype_base() noexcept {}
 };
+
+#undef _XA
+#undef _BB
+#undef _CN
+#undef _DI
+#undef _LO
+#undef _PU
+#undef _SP
+#undef _UP
+#undef _XD
 
 // CLASS TEMPLATE ctype
 template <class _Elem>
@@ -3263,16 +3232,58 @@ public:
     static_assert(!_ENFORCE_FACET_SPECIALIZATIONS || _Is_any_of_v<_Elem, char, wchar_t>, _FACET_SPECIALIZATION_MESSAGE);
 
     explicit __CLR_OR_THIS_CALL ctype_byname(const char* _Locname, size_t _Refs = 0)
-        : ctype<_Elem>(_Locinfo(_Locname), _Refs) { // construct for named locale
-    }
+        : ctype<_Elem>(_Locinfo(_Locname), _Refs) {} // construct for named locale
 
     explicit __CLR_OR_THIS_CALL ctype_byname(const string& _Str, size_t _Refs = 0)
-        : ctype<_Elem>(_Locinfo(_Str.c_str()), _Refs) { // construct for named locale
-    }
+        : ctype<_Elem>(_Locinfo(_Str.c_str()), _Refs) {} // construct for named locale
 
 protected:
     virtual __CLR_OR_THIS_CALL ~ctype_byname() noexcept {}
 };
+
+// FUNCTION TEMPLATE _Getloctxt
+template <class _Elem, class _InIt>
+int __CRTDECL _Getloctxt(_InIt& _First, _InIt& _Last, size_t _Numfields, const _Elem* _Ptr) {
+    // find field at _Ptr that matches longest in [_First, _Last)
+    for (size_t _Off = 0; _Ptr[_Off] != _Elem{}; ++_Off) {
+        if (_Ptr[_Off] == _Ptr[0]) {
+            ++_Numfields; // add fields with leading mark to initial count
+        }
+    }
+
+    string _Str(_Numfields, '\0'); // one column counter for each field
+    const ctype<_Elem>& _CType = _STD use_facet<ctype<_Elem>>(locale{});
+
+    int _Ans = -2; // no candidates so far
+    for (size_t _Column = 1;; ++_Column, (void) ++_First, _Ans = -1) { // test each element against all viable fields
+        bool _Prefix  = false; // seen at least one valid prefix
+        size_t _Off   = 0; // offset into fields
+        size_t _Field = 0; // current field number
+
+        for (; _Field < _Numfields; ++_Field) { // test element at _Column in field _Field
+            while (_Ptr[_Off] != _Elem{} && _Ptr[_Off] != _Ptr[0]) { // find beginning of field
+                ++_Off;
+            }
+
+            if (_Str[_Field] != '\0') {
+                _Off += _Str[_Field]; // skip tested columns in field
+            } else if (_Ptr[_Off += _Column] == _Ptr[0]
+                       || _Ptr[_Off] == _Elem{}) { // matched all of field, save as possible answer
+                _Str[_Field] = static_cast<char>(_Column < 127 ? _Column : 127); // save skip count if small enough
+                _Ans         = static_cast<int>(_Field); // save answer
+            } else if (_First == _Last || _CType.tolower(_Ptr[_Off]) != _CType.tolower(static_cast<_Elem>(*_First))) {
+                _Str[_Field] = static_cast<char>(_Column < 127 ? _Column : 127); // no match, just save skip count
+            } else {
+                _Prefix = true; // still a valid prefix
+            }
+        }
+
+        if (!_Prefix || _First == _Last) {
+            break; // no pending prefixes or no input, give up
+        }
+    }
+    return _Ans; // return field number or negative value on failure
+}
 
 #if defined(_DLL_CPPLIB)
 #if !defined(_CRTBLD) || defined(__FORCE_INSTANCE)

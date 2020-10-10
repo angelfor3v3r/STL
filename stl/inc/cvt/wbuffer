@@ -23,7 +23,6 @@ _STL_DISABLE_CLANG_WARNINGS
 // wostream mywcout(&mybuf); // construct wide ostream object
 // mywcout << static_cast<wchar_t>(0x80); // writes 0xc2 0x80
 
-
 namespace stdext {
     namespace cvt {
 
@@ -261,7 +260,8 @@ namespace stdext {
 
                     while (_Status != _Eof) { // get using codecvt facet
                         char* _Buf = &_Str[0];
-                        _Elem _Ch, *_Dest;
+                        _Elem _Ch;
+                        _Elem* _Dest;
                         const char* _Src;
                         int _Meta;
 
