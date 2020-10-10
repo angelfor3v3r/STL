@@ -316,11 +316,6 @@ _NODISCARD exception_ptr make_exception_ptr(_Ex _Except) noexcept {
     return exception_ptr::_Copy_exception(_STD addressof(_Except), __GetExceptionInfo(_Except));
 }
 
-// FUNCTION _Throw_bad_array_new_length
-[[noreturn]] inline void _Throw_bad_array_new_length() {
-    _THROW(bad_array_new_length{});
-}
-
 // CLASS nested_exception
 class nested_exception { // wrap an exception_ptr
 public:
