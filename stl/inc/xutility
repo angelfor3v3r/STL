@@ -6001,7 +6001,6 @@ _INLINE_VAR constexpr allocator_arg_t allocator_arg{};
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xoverflow_error(_In_z_ const char*);
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xruntime_error(_In_z_ const char*);
 
-<<<<<<< HEAD
 // In-class throws.
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xerror();
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xlen_string();
@@ -6012,13 +6011,7 @@ _INLINE_VAR constexpr allocator_arg_t allocator_arg{};
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xinv();
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xoflo();
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Throw_tree_length_error();
-=======
-// allow these to be provided too
-[[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xlen_string();
-[[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xlength();
-[[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Xrange();
 [[noreturn]] _CRTIMP2_PURE void __CLRCALL_PURE_OR_CDECL _Throw_bad_array_new_length();
->>>>>>> master
 
 // STRUCT TEMPLATE uses_allocator
 template <class _Ty, class _Alloc>
