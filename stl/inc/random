@@ -136,7 +136,8 @@ public:
         _Ty _Data;
         _Str >> _Data;
         if (!_Str) {
-            _Xinvalid_argument("input stream corrupted");
+            // input stream corrupted
+            _Xerror();
         }
 
         return _Data;

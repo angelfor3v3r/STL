@@ -1813,7 +1813,7 @@ void _Build_boyer_moore_delta_2_table(_Iter_diff_t<_RanItPat>* const _Shifts, co
     }
 
     if ((numeric_limits<_Diff>::max)() - _Pat_size < _Pat_size) {
-        _Xlength_error("Boyer-Moore pattern is too long");
+        _Xerror();
     }
 
     const auto _Mx = static_cast<size_t>(_Pat_size);

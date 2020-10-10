@@ -240,11 +240,11 @@ public:
     locale combine(const locale& _Loc) const { // combine two locales
         _Facet* _Facptr;
 
-        _TRY_BEGIN
         _Facptr = const_cast<_Facet*>(_STD addressof(_STD use_facet<_Facet>(_Loc)));
-        _CATCH_ALL
-        _Xruntime_error("locale::combine facet missing");
-        _CATCH_END
+        if( !_Facptr )
+        {
+            _Xerror();
+        }
 
         _Locimp* _Newimp = _Locimp::_New_Locimp(*_Ptr);
         _Newimp->_Addfac(_Facptr, _Facet::id);
@@ -307,7 +307,7 @@ private:
 
         if (_Bad) { // Don't throw within _BEGIN_LOCINFO if we can avoid it
             delete _Ptr->_Decref();
-            _Xruntime_error("bad locale name");
+            _Xerror();
         }
     }
 
@@ -321,7 +321,7 @@ public:
             return;
         }
 
-        _Xruntime_error("bad locale name");
+        _Xerror();
     }
 
     locale(const locale& _Loc, const char* _Locname, category _Cat) : _Ptr(_Locimp::_New_Locimp(*_Loc._Ptr)) {
@@ -333,7 +333,7 @@ public:
             return;
         }
 
-        _Xruntime_error("bad locale name");
+        _Xerror();
     }
 
     explicit locale(const string& _Str, category _Cat = all) : _Ptr(_Locimp::_New_Locimp()) {

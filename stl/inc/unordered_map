@@ -390,7 +390,7 @@ public:
             return _Target._Duplicate->_Myval.second;
         }
 
-        _Xout_of_range("invalid unordered_map<K, T> key");
+        _Xerror();
     }
 
     _NODISCARD const mapped_type& at(const key_type& _Keyval) const {
@@ -399,7 +399,7 @@ public:
             return _Target._Duplicate->_Myval.second;
         }
 
-        _Xout_of_range("invalid unordered_map<K, T> key");
+        _Xerror();
     }
 
     using _Mybase::_Unchecked_begin;

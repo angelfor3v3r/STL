@@ -1412,14 +1412,6 @@ private:
         }
     }
 
-    [[noreturn]] void _Xlen() const {
-        _Xlength_error("deque<T> too long");
-    }
-
-    [[noreturn]] void _Xran() const {
-        _Xout_of_range("invalid deque<T> subscript");
-    }
-
     void _Growmap(size_type _Count) { // grow map by at least _Count pointers, _Mapsize() a power of 2
         static_assert(1 < _Minimum_map_size, "The _Xlen() test should always be performed.");
 

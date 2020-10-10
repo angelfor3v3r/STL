@@ -31,7 +31,7 @@ namespace stdext {
     using _STD _Hash;
     using _STD _Is_nothrow_swappable;
     using _STD _Swap_adl;
-    using _STD _Xout_of_range;
+    using _STD _Xerror;
 
     // CLASS TEMPLATE _Hmap_traits
     template <class _Kty, // key type
@@ -230,7 +230,7 @@ namespace stdext {
                 return _Target._Duplicate->_Myval.second;
             }
 
-            _Xout_of_range("invalid hash_map<K, T> key");
+            _Xerror();
         }
 
         const mapped_type& at(const key_type& _Keyval) const {
@@ -239,7 +239,7 @@ namespace stdext {
                 return _Target._Duplicate->_Myval.second;
             }
 
-            _Xout_of_range("invalid hash_map<K, T> key");
+            _Xerror();
         }
 
         using reverse_iterator       = _STD reverse_iterator<iterator>;

@@ -1708,14 +1708,6 @@ private:
         }
     }
 
-    [[noreturn]] static void _Xlength() {
-        _Xlength_error("vector too long");
-    }
-
-    [[noreturn]] static void _Xrange() {
-        _Xout_of_range("invalid vector subscript");
-    }
-
     void _Orphan_range(pointer _First, pointer _Last) const { // orphan iterators within specified (inclusive) range
 #if _ITERATOR_DEBUG_LEVEL == 2
         _Lockit _Lock(_LOCK_DEBUG);
@@ -2841,14 +2833,6 @@ public:
         if (0 < _Size) {
             this->_Myvec[_Words - 1] &= (static_cast<_Vbase>(1) << _Size) - 1;
         }
-    }
-
-    [[noreturn]] void _Xlen() const {
-        _Xlength_error("vector<bool> too long");
-    }
-
-    [[noreturn]] void _Xran() const {
-        _Xout_of_range("invalid vector<bool> subscript");
     }
 };
 

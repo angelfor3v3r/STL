@@ -1732,7 +1732,7 @@ protected:
     void _Check_max_size() const {
         const size_type _Oldsize = _List._Mypair._Myval2._Mysize;
         if (_Oldsize == _List.max_size()) {
-            _Xlength_error("unordered_map/set too long");
+            _Xerror();
         }
     }
 
@@ -1802,7 +1802,7 @@ protected:
         const unsigned long _Max_storage_buckets_log2 = _Floor_of_log_2(static_cast<size_t>(_Vec.max_size() >> 1));
         const auto _Max_storage_buckets               = static_cast<size_type>(1) << _Max_storage_buckets_log2;
         if (_Buckets > _Max_storage_buckets) {
-            _Xlength_error("invalid hash bucket count");
+            _Xerror();
         }
 
         // The above test also means that we won't perform a forbidden full shift when restoring the power of

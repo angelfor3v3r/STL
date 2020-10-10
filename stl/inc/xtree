@@ -411,10 +411,6 @@ struct _Tree_find_hint_result {
     bool _Duplicate;
 };
 
-[[noreturn]] inline void _Throw_tree_length_error() {
-    _Xlength_error("map/set too long");
-}
-
 // CLASS TEMPLATE _Tree_val
 template <class _Val_types>
 class _Tree_val : public _Container_base {

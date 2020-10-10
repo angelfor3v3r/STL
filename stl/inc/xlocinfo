@@ -158,7 +158,7 @@ public:
             return;
         }
 
-        _Xruntime_error("bad locale name");
+        _Xerror();
     }
 
     __CLR_OR_THIS_CALL _Locinfo(int _Cat, const char* _Pch)
@@ -172,7 +172,7 @@ public:
             return;
         }
 
-        _Xruntime_error("bad locale name");
+        _Xerror();
     }
 
     __CLR_OR_THIS_CALL ~_Locinfo() noexcept {
@@ -184,7 +184,7 @@ public:
             return _Locinfo_Addcats(this, _Cat, _Pch);
         }
 
-        _Xruntime_error("bad locale name");
+        _Xerror();
     }
 
     const char* __CLR_OR_THIS_CALL _Getname() const {

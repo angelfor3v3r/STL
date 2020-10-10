@@ -9,6 +9,7 @@
 #include <yvals_core.h>
 #if _STL_COMPILER_PREPROCESSOR
 #include <xstring>
+#include <optional>
 // The <cctype> include below is to workaround many projects that assumed
 // <string> includes it. We workaround it instead of fixing all the upstream
 // projects because <cctype> is inexpensive. See VSO-663136.
@@ -85,7 +86,7 @@ basic_istream<_Elem, _Traits>& getline(basic_istream<_Elem, _Traits>& _Istr,
 }
 
 // sto* NARROW CONVERSIONS
-inline int stoi(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
+inline std::optional< int > stoi(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     // convert string to int
     int& _Errno_ref  = errno; // Nonzero cost, pay it once
     const char* _Ptr = _Str.c_str();
@@ -94,11 +95,11 @@ inline int stoi(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     const long _Ans = _CSTD strtol(_Ptr, &_Eptr, _Base);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stoi argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE || _Ans < INT_MIN || INT_MAX < _Ans) {
-        _Xout_of_range("stoi argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -108,7 +109,7 @@ inline int stoi(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     return static_cast<int>(_Ans);
 }
 
-inline long stol(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
+inline std::optional< long > stol(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     // convert string to long
     int& _Errno_ref  = errno; // Nonzero cost, pay it once
     const char* _Ptr = _Str.c_str();
@@ -117,11 +118,11 @@ inline long stol(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     const long _Ans = _CSTD strtol(_Ptr, &_Eptr, _Base);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stol argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stol argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -131,7 +132,7 @@ inline long stol(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     return _Ans;
 }
 
-inline unsigned long stoul(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
+inline std::optional< unsigned long > stoul(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     // convert string to unsigned long
     int& _Errno_ref  = errno; // Nonzero cost, pay it once
     const char* _Ptr = _Str.c_str();
@@ -140,11 +141,11 @@ inline unsigned long stoul(const string& _Str, size_t* _Idx = nullptr, int _Base
     const unsigned long _Ans = _CSTD strtoul(_Ptr, &_Eptr, _Base);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stoul argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stoul argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -154,7 +155,7 @@ inline unsigned long stoul(const string& _Str, size_t* _Idx = nullptr, int _Base
     return _Ans;
 }
 
-inline long long stoll(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
+inline std::optional< long long > stoll(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     // convert string to long long
     int& _Errno_ref  = errno; // Nonzero cost, pay it once
     const char* _Ptr = _Str.c_str();
@@ -163,11 +164,11 @@ inline long long stoll(const string& _Str, size_t* _Idx = nullptr, int _Base = 1
     const long long _Ans = _CSTD strtoll(_Ptr, &_Eptr, _Base);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stoll argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stoll argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -177,7 +178,7 @@ inline long long stoll(const string& _Str, size_t* _Idx = nullptr, int _Base = 1
     return _Ans;
 }
 
-inline unsigned long long stoull(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
+inline std::optional< unsigned long long > stoull(const string& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     // convert string to unsigned long long
     int& _Errno_ref  = errno; // Nonzero cost, pay it once
     const char* _Ptr = _Str.c_str();
@@ -186,11 +187,11 @@ inline unsigned long long stoull(const string& _Str, size_t* _Idx = nullptr, int
     const unsigned long long _Ans = _CSTD strtoull(_Ptr, &_Eptr, _Base);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stoull argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stoull argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -200,7 +201,7 @@ inline unsigned long long stoull(const string& _Str, size_t* _Idx = nullptr, int
     return _Ans;
 }
 
-inline float stof(const string& _Str, size_t* _Idx = nullptr) { // convert string to float
+inline std::optional< float > stof(const string& _Str, size_t* _Idx = nullptr) { // convert string to float
     int& _Errno_ref  = errno; // Nonzero cost, pay it once
     const char* _Ptr = _Str.c_str();
     char* _Eptr;
@@ -208,11 +209,11 @@ inline float stof(const string& _Str, size_t* _Idx = nullptr) { // convert strin
     const float _Ans = _CSTD strtof(_Ptr, &_Eptr);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stof argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stof argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -222,7 +223,7 @@ inline float stof(const string& _Str, size_t* _Idx = nullptr) { // convert strin
     return _Ans;
 }
 
-inline double stod(const string& _Str, size_t* _Idx = nullptr) { // convert string to double
+inline std::optional< double > stod(const string& _Str, size_t* _Idx = nullptr) { // convert string to double
     int& _Errno_ref  = errno; // Nonzero cost, pay it once
     const char* _Ptr = _Str.c_str();
     char* _Eptr;
@@ -230,11 +231,11 @@ inline double stod(const string& _Str, size_t* _Idx = nullptr) { // convert stri
     const double _Ans = _CSTD strtod(_Ptr, &_Eptr);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stod argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stod argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -244,7 +245,7 @@ inline double stod(const string& _Str, size_t* _Idx = nullptr) { // convert stri
     return _Ans;
 }
 
-inline long double stold(const string& _Str, size_t* _Idx = nullptr) { // convert string to long double
+inline std::optional< long double > stold(const string& _Str, size_t* _Idx = nullptr) { // convert string to long double
     int& _Errno_ref  = errno; // Nonzero cost, pay it once
     const char* _Ptr = _Str.c_str();
     char* _Eptr;
@@ -252,11 +253,11 @@ inline long double stold(const string& _Str, size_t* _Idx = nullptr) { // conver
     const long double _Ans = _CSTD strtold(_Ptr, &_Eptr);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stold argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stold argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -267,7 +268,7 @@ inline long double stold(const string& _Str, size_t* _Idx = nullptr) { // conver
 }
 
 // sto* WIDE CONVERSIONS
-inline int stoi(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
+inline std::optional< int > stoi(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     // convert wstring to int
     int& _Errno_ref     = errno; // Nonzero cost, pay it once
     const wchar_t* _Ptr = _Str.c_str();
@@ -276,11 +277,11 @@ inline int stoi(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     const long _Ans = _CSTD wcstol(_Ptr, &_Eptr, _Base);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stoi argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE || _Ans < INT_MIN || INT_MAX < _Ans) {
-        _Xout_of_range("stoi argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -290,7 +291,7 @@ inline int stoi(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     return static_cast<int>(_Ans);
 }
 
-inline long stol(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
+inline std::optional< long > stol(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     // convert wstring to long
     int& _Errno_ref     = errno; // Nonzero cost, pay it once
     const wchar_t* _Ptr = _Str.c_str();
@@ -299,11 +300,11 @@ inline long stol(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     const long _Ans = _CSTD wcstol(_Ptr, &_Eptr, _Base);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stol argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stol argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -313,7 +314,7 @@ inline long stol(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     return _Ans;
 }
 
-inline unsigned long stoul(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
+inline std::optional< unsigned long > stoul(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     // convert wstring to unsigned long
     int& _Errno_ref     = errno; // Nonzero cost, pay it once
     const wchar_t* _Ptr = _Str.c_str();
@@ -322,11 +323,11 @@ inline unsigned long stoul(const wstring& _Str, size_t* _Idx = nullptr, int _Bas
     const unsigned long _Ans = _CSTD wcstoul(_Ptr, &_Eptr, _Base);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stoul argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stoul argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -336,7 +337,7 @@ inline unsigned long stoul(const wstring& _Str, size_t* _Idx = nullptr, int _Bas
     return _Ans;
 }
 
-inline long long stoll(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
+inline std::optional< long long > stoll(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     // convert wstring to long long
     int& _Errno_ref     = errno; // Nonzero cost, pay it once
     const wchar_t* _Ptr = _Str.c_str();
@@ -345,11 +346,11 @@ inline long long stoll(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 
     const long long _Ans = _CSTD wcstoll(_Ptr, &_Eptr, _Base);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stoll argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stoll argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -359,7 +360,7 @@ inline long long stoll(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 
     return _Ans;
 }
 
-inline unsigned long long stoull(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
+inline std::optional< unsigned long long > stoull(const wstring& _Str, size_t* _Idx = nullptr, int _Base = 10) {
     // convert wstring to unsigned long long
     int& _Errno_ref     = errno; // Nonzero cost, pay it once
     const wchar_t* _Ptr = _Str.c_str();
@@ -368,11 +369,11 @@ inline unsigned long long stoull(const wstring& _Str, size_t* _Idx = nullptr, in
     const unsigned long long _Ans = _CSTD wcstoull(_Ptr, &_Eptr, _Base);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stoull argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stoull argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -382,7 +383,7 @@ inline unsigned long long stoull(const wstring& _Str, size_t* _Idx = nullptr, in
     return _Ans;
 }
 
-inline float stof(const wstring& _Str, size_t* _Idx = nullptr) { // convert wstring to float
+inline std::optional< float > stof(const wstring& _Str, size_t* _Idx = nullptr) { // convert wstring to float
     int& _Errno_ref     = errno; // Nonzero cost, pay it once
     const wchar_t* _Ptr = _Str.c_str();
     wchar_t* _Eptr;
@@ -390,11 +391,11 @@ inline float stof(const wstring& _Str, size_t* _Idx = nullptr) { // convert wstr
     const float _Ans = _CSTD wcstof(_Ptr, &_Eptr);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stof argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stof argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -404,7 +405,7 @@ inline float stof(const wstring& _Str, size_t* _Idx = nullptr) { // convert wstr
     return _Ans;
 }
 
-inline double stod(const wstring& _Str, size_t* _Idx = nullptr) { // convert wstring to double
+inline std::optional< double > stod(const wstring& _Str, size_t* _Idx = nullptr) { // convert wstring to double
     int& _Errno_ref     = errno; // Nonzero cost, pay it once
     const wchar_t* _Ptr = _Str.c_str();
     wchar_t* _Eptr;
@@ -412,11 +413,11 @@ inline double stod(const wstring& _Str, size_t* _Idx = nullptr) { // convert wst
     const double _Ans = _CSTD wcstod(_Ptr, &_Eptr);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stod argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stod argument out of range");
+        return {};
     }
 
     if (_Idx) {
@@ -426,7 +427,7 @@ inline double stod(const wstring& _Str, size_t* _Idx = nullptr) { // convert wst
     return _Ans;
 }
 
-inline long double stold(const wstring& _Str, size_t* _Idx = nullptr) { // convert wstring to long double
+inline std::optional< long double > stold(const wstring& _Str, size_t* _Idx = nullptr) { // convert wstring to long double
     int& _Errno_ref     = errno; // Nonzero cost, pay it once
     const wchar_t* _Ptr = _Str.c_str();
     wchar_t* _Eptr;
@@ -434,11 +435,11 @@ inline long double stold(const wstring& _Str, size_t* _Idx = nullptr) { // conve
     const long double _Ans = _CSTD wcstold(_Ptr, &_Eptr);
 
     if (_Ptr == _Eptr) {
-        _Xinvalid_argument("invalid stold argument");
+        return {};
     }
 
     if (_Errno_ref == ERANGE) {
-        _Xout_of_range("stold argument out of range");
+        return {};
     }
 
     if (_Idx) {

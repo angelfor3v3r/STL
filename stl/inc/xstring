@@ -1632,10 +1632,6 @@ private:
         return (_STD min)(_Size, _Mysize - _Off);
     }
 
-    [[noreturn]] static void _Xran() {
-        _Xout_of_range("invalid string_view position");
-    }
-
     const_pointer _Mydata;
     size_type _Mysize;
 };
@@ -2239,10 +2235,6 @@ public:
         }
     }
 
-    [[noreturn]] static void _Xran() {
-        _Xout_of_range("invalid string position");
-    }
-
     size_type _Clamp_suffix_size(const size_type _Off, const size_type _Size) const noexcept {
         // trims _Size to the longest it can be assuming a string at/after _Off
         return (_STD min)(_Size, _Mysize - _Off);
@@ -2270,10 +2262,6 @@ struct _String_constructor_concat_tag {
     // tag to select constructors used by basic_string's concatenation operators (operator+)
     explicit _String_constructor_concat_tag() = default;
 };
-
-[[noreturn]] inline void _Xlen_string() {
-    _Xlength_error("string too long");
-}
 
 template <class _Elem, class _Traits = char_traits<_Elem>, class _Alloc = allocator<_Elem>>
 class basic_string { // null-terminated transparent array of elements

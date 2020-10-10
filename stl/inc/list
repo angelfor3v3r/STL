@@ -1012,7 +1012,7 @@ public:
     _Nodeptr _Emplace(const _Nodeptr _Where, _Valty&&... _Val) { // insert element at _Where
         size_type& _Mysize = _Mypair._Myval2._Mysize;
         if (_Mysize == max_size()) {
-            _Xlength_error("list too long");
+            _Xerror();
         }
 
         _List_node_emplace_op2<_Alnode> _Op{_Getal(), _STD forward<_Valty>(_Val)...};
@@ -1746,7 +1746,7 @@ private:
 
             auto& _My_data = _Mypair._Myval2;
             if (max_size() - _My_data._Mysize < _Count) {
-                _Xlength_error("list too long");
+                _Xerror();
             }
 
             auto& _Right_data = _Right._Mypair._Myval2;

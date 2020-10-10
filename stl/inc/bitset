@@ -454,18 +454,6 @@ private:
         return *this;
     }
 
-    [[noreturn]] void _Xinv() const {
-        _Xinvalid_argument("invalid bitset char");
-    }
-
-    [[noreturn]] void _Xoflo() const {
-        _Xoverflow_error("bitset overflow");
-    }
-
-    [[noreturn]] void _Xran() const {
-        _Xout_of_range("invalid bitset position");
-    }
-
     _Ty _Array[_Words + 1];
 };
 

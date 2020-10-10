@@ -328,7 +328,7 @@ public:
     _NODISCARD mapped_type& at(const key_type& _Keyval) {
         const auto _Loc = _Mybase::_Find_lower_bound(_Keyval);
         if (!_Mybase::_Lower_bound_duplicate(_Loc._Bound, _Keyval)) {
-            _Xout_of_range("invalid map<K, T> key");
+            _Xerror();
         }
 
         return _Loc._Bound->_Myval.second;
@@ -337,7 +337,7 @@ public:
     _NODISCARD const mapped_type& at(const key_type& _Keyval) const {
         const auto _Loc = _Mybase::_Find_lower_bound(_Keyval);
         if (!_Mybase::_Lower_bound_duplicate(_Loc._Bound, _Keyval)) {
-            _Xout_of_range("invalid map<K, T> key");
+            _Xerror();
         }
 
         return _Loc._Bound->_Myval.second;

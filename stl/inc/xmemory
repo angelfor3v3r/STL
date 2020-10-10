@@ -977,7 +977,7 @@ template <class _Size_type>
 _NODISCARD constexpr _Size_type _Convert_size(const size_t _Len) noexcept {
     // convert size_t to _Size_type, avoiding truncation
     if (_Len > (numeric_limits<_Size_type>::max)()) {
-        _Xlength_error("size_t too long for _Size_type");
+        _Xerror();
     }
 
     return static_cast<_Size_type>(_Len);

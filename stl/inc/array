@@ -577,10 +577,6 @@ public:
         return _Elems;
     }
 
-    [[noreturn]] void _Xran() const {
-        _Xout_of_range("invalid array<T, N> subscript");
-    }
-
     _Ty _Elems[_Size];
 };
 
@@ -759,10 +755,6 @@ public:
 
     _NODISCARD _CONSTEXPR17 const _Ty* data() const noexcept {
         return nullptr;
-    }
-
-    [[noreturn]] void _Xran() const {
-        _Xout_of_range("invalid array<T, 0> subscript");
     }
 
     _Ty _Elems[1];
