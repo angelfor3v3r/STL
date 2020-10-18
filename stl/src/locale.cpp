@@ -150,7 +150,7 @@ _Locinfo& __CLRCALL_PURE_OR_CDECL _Locinfo::_Locinfo_Addcats(
     const char* oldlocname = nullptr;
 
     if (locname == nullptr) {
-        _Xruntime_error("bad locale name");
+        _Xerror();
     }
 
     if (locname[0] != '*' || locname[1] != '\0') {

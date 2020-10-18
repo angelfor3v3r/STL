@@ -288,7 +288,7 @@ struct _Path_cvt<char, wchar_t, _Outtraits,
         size_t) { // convert char sequence to wchar_t string -- Windows
         _Outchar _Fname_wide[_MAX_FILESYS_NAME];
         if (_To_wide(_First, _Fname_wide) == 0) {
-            _Xinvalid_argument("invalid char filename argument");
+            _Xerror();
         }
 
         return _STD move(_Str.append(&_Fname_wide[0]));
@@ -312,7 +312,7 @@ struct _Path_cvt<wchar_t, char, _Outtraits,
         size_t) { // convert wchar_t sequence to char string -- Windows
         _Outchar _Fname_byte[_MAX_FILESYS_NAME];
         if (_To_byte(_First, _Fname_byte) == 0) {
-            _Xinvalid_argument("invalid wchar_t filename argument");
+            _Xerror();
         }
 
         return _STD move(_Str.append(&_Fname_byte[0]));
@@ -338,7 +338,7 @@ struct _Path_cvt<char, _Char8_t, char_traits<char>,
         _Unused_parameter = {}) { // convert char sequence to UTF8 string -- Windows
         wchar_t _Fname_wide[_MAX_FILESYS_NAME];
         if (_To_wide(_First, _Fname_wide) == 0) {
-            _Xinvalid_argument("invalid char filename argument");
+            _Xerror();
         }
 
         wstring_convert<codecvt_utf8<wchar_t>, wchar_t> _Wcvt;
@@ -364,7 +364,7 @@ struct _Path_cvt<_Char8_t, char, _Outtraits,
 
         _Outchar _Fname_byte[_MAX_FILESYS_NAME];
         if (_To_byte(_Str0.c_str(), _Fname_byte) == 0) {
-            _Xinvalid_argument("invalid UTF8 filename argument");
+            _Xerror();
         }
 
         return _STD move(_Str.append(&_Fname_byte[0]));
