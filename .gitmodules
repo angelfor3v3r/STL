@@ -5,6 +5,3 @@
 	path = vcpkg
 	url = https://github.com/microsoft/vcpkg.git
 	fetchRecurseSubmodules = false
-[submodule "llvm-project"]
-	path = llvm-project
-	url = https://github.com/llvm/llvm-project.git
