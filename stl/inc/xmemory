@@ -74,12 +74,12 @@ _INLINE_VAR constexpr size_t _New_alignof = (_STD max)(alignof(_Ty),
 // STRUCT _Default_allocate_traits
 struct _Default_allocate_traits {
     __declspec(allocator) static void* _Allocate(const size_t _Bytes) {
-        return ::operator new(_Bytes);
+        return ::operator new(_Bytes, nothrow);
     }
 
 #ifdef __cpp_aligned_new
     __declspec(allocator) static void* _Allocate_aligned(const size_t _Bytes, const size_t _Align) {
-        return ::operator new (_Bytes, align_val_t{_Align});
+        return ::operator new (_Bytes, align_val_t{_Align}, nothrow);
     }
 #endif // __cpp_aligned_new
 };
